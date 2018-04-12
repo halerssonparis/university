@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="7" column="0">
+       <widget class="QRadioButton" name="radio_NOrientado">
+        <property name="text">
+         <string>Não Orientado</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="button_prim">
+        <property name="text">
+         <string>Prim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="button_dsatur">
+        <property name="text">
+         <string>Dsatur</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="button_dijkstra">
+        <property name="text">
+         <string>Dijkstra</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QRadioButton" name="radio_Orientado">
+        <property name="text">
+         <string>Orientado</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="button_welsh_powell">
+        <property name="text">
+         <string>welsh Powell</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="button_reseta_cor">
+        <property name="text">
+         <string>Resetar Cores</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QPushButton" name="button_kruskal">
+        <property name="text">
+         <string>Kruskal</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Ferramentas</string>
+    </property>
+    <addaction name="actionAdd_Vertice"/>
+    <addaction name="actionAdd_Aresta"/>
+    <addaction name="actionAdd_Arco"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemove_Vertice"/>
+    <addaction name="actionRemove_Aresta"/>
+    <addaction name="actionRemove_Arca"/>
+    <addaction name="separator"/>
+    <addaction name="actionVerificar_Planaridade"/>
+   </widget>
+   <addaction name="menuTools"/>
+  </widget>
+  <action name="actionAdd_Vertice">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Adicionar Vertice</string>
+   </property>
+  </action>
+  <action name="actionAdd_Aresta">
+   <property name="text">
+    <string>Adicionar Aresta</string>
+   </property>
+  </action>
+  <action name="actionAdd_Arco">
+   <property name="text">
+    <string>Adicionar Arco</string>
+   </property>
+  </action>
+  <action name="actionRemove_Vertice">
+   <property name="text">
+    <string>Remover Vertice</string>
+   </property>
+  </action>
+  <action name="actionRemove_Aresta">
+   <property name="text">
+    <string>Remover Aresta</string>
+   </property>
+  </action>
+  <action name="actionRemove_Arca">
+   <property name="text">
+    <string>Remover Arco</string>
+   </property>
+  </action>
+  <action name="actionVerificar_Planaridade">
+   <property name="text">
+    <string>Verificar Planaridade</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
