@@ -1,0 +1,235 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = Stream
+Parser = SLR
+#RegularDefinitions
+variable: [_a-zA-Z][a-zA-Z0-9_]*
+numbers: [0-9]+
+//arithimetic_char: (+ | \- | \/ | *)
+relational_operators: (<|>|<=|>=|!=|==)
+logical_operators: (&&|\|\||!)
+bitwise: (<<|>>|&|\||~|\^)
+comment_multi_line: /\*[^\*]*\**([^/\*][^\*]*\*+)?/
+comment_single_line: (/)/.*
+hexa_decimal: [0-9A-F]x[0-9A-Fa-f]*
+words: [^\"]*
+#Tokens
+numbers: {numbers}
+variable : {variable}
+binary: [0-1]+
+
+number_float: {numbers}\.{numbers}
+hexa_decima: {hexa_decimal}
+
+: [\s\t\n\r]
+
+int = variable : "int"
+float = variable : "float"
+string = variable : "string"
+char = variable: "char"
+byte = variable : "byte"
+unsigned = variable : "unsigned"
+long = variable: "long"
+bool = variable: "bool"
+void = variable: "void"
+
+do = variable: "do"
+if = variable: "if"
+else = variable : "else"
+else_if = variable : "elseif"
+while = variable : "while"
+for = variable : "for"
+return = variable : "return"
+break = variable : "break"
+switch = variable : "switch"
+case = variable : "case"
+
+//aritmeticos
+"+"
+"-"
+"*"
+"/"
+"%"
+//relacional
+">"
+"<"
+">="
+"<="
+"="
+"!="
+//logicos
+"&&"
+"||"
+"!"
+// bitwise
+"~"
+">>"
+"<<"
+"^"
+"|"
+"&"
+// others
+"("
+")"
+"{"
+"}"
+"["
+"]"
+";"
+","
+"."
+"=>"
+":"
+"->"
+"++"
+"--"
+
+end_line : ";"
+echo = variable : "echo"
+put = variable : "put"
+
+comment_line: {comment_single_line}
+comment_multi_lines: {comment_multi_line}
+#NonTerminals
+<__FUNCTION__>
+<TYPE>
+
+<PARAMS_TYPE>
+<PARAMS_LIST>
+<ID_PARAMS>
+
+<LAMBDA>
+
+<CMD_LIST>
+<CMD_LIST2>
+
+<COMMENTS>
+
+<ASSIGN>
+
+<VARIABLE_DECLARATION>
+<VAR_LIST>
+<ID_TYPES>
+
+
+<REPEAT_LOOP>
+<DO_LOOP>
+<FOR_LOOP>
+<WHILE_LOOP>
+
+<LOOP_DEC_LIST>
+<LOOP_COND_LIST>
+<LOOP_ATRIB_LIST>
+<LOOP_ATRIB_TYPE>
+
+<IF>
+<ELSE_IF>
+<ELSE>
+
+<DATA_ENTRY>
+<TYPE_ENTRY>
+
+//CODIGO DO PROFESSOR
+<exp>
+<exp1>
+<exp2>
+<exp3>
+<exp4>
+<exp5>
+<exp6>
+<exp7>
+<exp8>
+<exp9>
+<exp10>
+<exp11>
+<exp12>
+<exp13>
+<op_rel>
+<op_neg>
+<op_bitwise>
+<op_arit_baixa>
+<op_arit_alta>
+<op_arit_mais_alta>
+//TERMINO DO CODIGO DO P.
+#Grammar
+//PROGRAMA INICIA COM UMA FUNCAO 
+<__FUNCTION__> ::= <__FUNCTION__> <TYPE> variable "(" <PARAMS_TYPE> ")" "{" <CMD_LIST> "}" | î;
+
+<TYPE> ::= int | float | string | char | byte | unsigned | long | bool | void;
+
+//PARAMENTROS (ISSO É PARA INICIAR FUNCOES) 
+<PARAMS_TYPE> ::=  <ID_PARAMS> <PARAMS_LIST>| î;
+<PARAMS_LIST> ::= "," <ID_PARAMS> <PARAMS_LIST> | î;
+<ID_PARAMS> ::= <TYPE> <ID_TYPES> | <LAMBDA>;
+
+//lambda retorna qualquer <TYPE>, é pra ser generico mesmo
+<LAMBDA> ::= "(" <PARAMS_TYPE> ")" "=>" "{" <CMD_LIST> "}";
+
+//CORPO DA FUNCAO
+<CMD_LIST> ::=  <VARIABLE_DECLARATION> ";" <CMD_LIST> | <REPEAT_LOOP> <CMD_LIST> |  <IF> <CMD_LIST> | <CMD_LIST2>;
+<CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <exp> ";" <CMD_LIST> | <COMMENTS> <CMD_LIST> | <ID_TYPES> <ASSIGN>";" <CMD_LIST> | î;
+
+<COMMENTS> ::= comment_multi_lines | comment_line;
+//BLOCOS DE INSTRUCAO
+<ASSIGN> ::= "=" <exp>;
+
+
+//DECLARACAO DE VARIAVEL
+<VARIABLE_DECLARATION> ::= <TYPE> <VAR_LIST> | <TYPE> <VAR_LIST> <ASSIGN>;
+<VAR_LIST> ::= <VAR_LIST> "," <ID_TYPES> | <ID_TYPES>; //| <ASSIGN> | <VAR_LIST><ASSING>;
+<ID_TYPES> ::= variable | variable "[" <exp> "]";
+
+//LACOS DE REPETICOES
+<REPEAT_LOOP> ::= <DO_LOOP> | <FOR_LOOP> | <WHILE_LOOP>;
+<DO_LOOP> ::= do "{" <CMD_LIST> "}" while "(" <LOOP_DEC_LIST> ")";
+<FOR_LOOP> ::= for "(" <LOOP_DEC_LIST> ")" "{" <CMD_LIST> "}";
+<WHILE_LOOP> ::= while "(" <LOOP_DEC_LIST> ")" "{" <CMD_LIST> "}";
+
+<LOOP_DEC_LIST> ::= <VARIABLE_DECLARATION> ";" <LOOP_DEC_LIST> | <LOOP_COND_LIST>;
+<LOOP_COND_LIST> ::= <exp> <LOOP_ATRIB_LIST>;
+<LOOP_ATRIB_LIST> ::= <LOOP_ATRIB_LIST> ";" <ID_TYPES> <LOOP_ATRIB_TYPE> | î ; // <VAR_LIST> <ASSIGN>;
+<LOOP_ATRIB_TYPE> ::= <ASSIGN> | "++" | "--";
+
+//IF
+<IF> ::= if "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> <ELSE>;
+<ELSE_IF> ::= else_if "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> | î;
+<ELSE> ::= else "{" <CMD_LIST> "}" | î;
+
+//LEITURA E ESCRITA
+<DATA_ENTRY> ::= <TYPE_ENTRY> <exp> ";";
+<TYPE_ENTRY> ::= put | echo;
+
+//CODIGO DO PROFESSOR
+<exp>  ::= <exp> "||" <exp1> | <exp1>;
+<exp1> ::= <exp1> "&&" <exp2> | <exp2>;
+<exp2> ::= <exp2> "|" <exp3> | <exp3>;
+<exp3> ::= <exp3> "^" <exp4> | <exp4>;
+<exp4> ::= <exp4> "&" <exp5> | <exp5>;
+<exp5> ::= <exp5> <op_rel> <exp6> | <exp6>;
+<exp6> ::= <exp6> <op_bitwise> <exp7> | <exp7>;
+<exp7> ::= <exp7> <op_arit_baixa> <exp8> | <exp8>;
+<exp8> ::= <exp8> <op_arit_alta> <exp9> | <exp9> ;
+<exp9> ::= <op_neg> <exp10> | <exp10>;
+<exp10> ::= number_float | numbers | binary | variable | "(" <exp> ")" | variable"(" <exp11> ")" | variable "[" <exp> "]";//"["<exp>"]" | 
+<exp11> ::= <exp12> | î;
+<exp12> ::= <exp12> "," <exp13> | <exp13>;
+<exp13> ::= <LAMBDA> | <exp>;
+
+<op_rel> ::= ">" | "<" | ">=" | "<=" | "=" | "!="; 
+<op_neg> ::= "-" | "~" | "!";
+<op_bitwise> ::= "<<" | ">>";
+<op_arit_baixa> ::= "+" | "-";
+<op_arit_alta> ::= "*" | "/" | "%";
+
+//Exemplo com tudo para ser usado no simulador
+// -x + 8.8 - !x * 2 / ~y % 3 << 7 != y >> 3 || (x <= 3 && y > 8) | p & (h ^ g)
+//TERMINO DO CODIGO DO PROFESSOR
+
+
