@@ -1,0 +1,31 @@
+int a(int b) {
+
+	int a,b,c = 523;
+
+	for (int t = a+b; int c = a+b%funct(); i < abc; i++; i=func()) {
+		a = i+a;
+	}
+
+	do {
+		int a = a+b;
+
+	}while( i < 5)
+
+
+	while ( a < b ) {
+
+		return a + funcao();
+	}
+
+	int a = func((int b, int c) => {
+		return 5;	
+	});
+
+	return 1;
+}
+
+int function2(int callback, int a) {
+
+
+	return callback(a+1, 2);
+}	
