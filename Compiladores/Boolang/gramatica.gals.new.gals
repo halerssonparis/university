@@ -1,0 +1,50 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+Package = br.univali.boolang
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = String
+Parser = SLR
+#RegularDefinitions
+ignoraveis: [\s\n\r\t]+
+num: [01]+
+var: [a-zA-Z_][a-zA-Z0-9_]*
+#Tokens
+ : {ignoraveis}
+number: {num}
+plus: "+"
+minus: "-"
+pow: "^"
+mult: "*"
+div: "/"
+open: "("
+show: "print"
+close: ")"
+variable: {var}
+end: ";"
+attrib: "<-"
+
+
+#NonTerminals
+<REC_EXPR>
+<A>
+<B>
+<C>
+<D>
+<SHOW_EXPR>
+<EXPR>
+<ATTRIB_EXPR>
+#Grammar
+<REC_EXPR> ::= <EXPR> <REC_EXPR> | <EXPR> ;
+<EXPR> ::= <SHOW_EXPR> end | <ATTRIB_EXPR> end ;
+<SHOW_EXPR> ::= show <A> #2 ;
+<ATTRIB_EXPR> ::= variable #0 attrib <A> #1 ;
+<A> ::= <A> plus <B> #5 | <A> minus <B> #6 | <B> ;
+<B> ::= <B> mult <C> #7 | <B> div <C> #8 | <C> ;
+<C> ::= <C> pow <D> #9 | <D> ;
+<D> ::= open <A> close | number #3 | variable #4 ;

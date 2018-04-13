@@ -1,0 +1,10 @@
+#0: variável "destino" da atribuição
+#1: término da expressão para atribuição
+#2: término da expressão para exibição
+#3: inserir número no topo da pilha
+#4: inserir variável no topo da pilha
+#5: soma último e penúltimo
+#6: penúltimo menos último
+#7: multiplica último com penúltimo
+#8: penúltimo dividido pelo último
+#9: penúltimo elevado a último
