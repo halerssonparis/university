@@ -2,8 +2,10 @@ package compiler;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,13 +24,23 @@ public class Ide extends JFrame{
     private JTextArea CodeArea = new JTextArea();
     private JTextArea ResultCodeArea = new JTextArea();
     
-    private JScrollPane ScrollCodeArea = new JScrollPane();
-    private JScrollPane ScrollResultCodeArea = new JScrollPane();
+    private JScrollPane ScrollCodeArea = new JScrollPane(CodeArea);
+    private JScrollPane ScrollResultCodeArea = new JScrollPane(ResultCodeArea);
     
-    private JButton ButtonExecute = new JButton("Execute");
-    private JButton ButtonCompile = new JButton("Compile");
+    private JButton buttonExecute = new JButton("Execute");
+    private JButton buttonCompile = new JButton("Compile");
     
-    private void __INIT__ () {
+    public void onExecute(Consumer<String> executionConsumer) {
+        buttonExecute.addActionListener((event) -> {
+            executionConsumer.accept(CodeArea.getText());
+        });
+    }
+    
+    public Ide() {
+        Init();
+    }
+    
+    private void Init () {
     
         try {
             UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -41,15 +53,29 @@ public class Ide extends JFrame{
         this.setLayout(new BorderLayout());
         this.setTitle("Eleonora");
         
-        CodeArea.setLineWrap(true);
+        CodeArea.setLineWrap(false);
         CodeArea.setColumns(5);
         CodeArea.setRows(15);
         
         ResultCodeArea.setEditable(false);
+        ResultCodeArea.setLineWrap(true);
         ResultCodeArea.setColumns(5);
         ResultCodeArea.setRows(5);
         
-        PanelCodeArea.add(BorderLayout.CENTER, )
+        PanelCodeArea.add(BorderLayout.CENTER, ScrollCodeArea);
+        PanelResultCodeArea.add(BorderLayout.SOUTH, ScrollResultCodeArea);
+        PanelTopButtons.add(buttonCompile);
+        PanelTopButtons.add(buttonExecute);
+        
+        PanelCodeArea.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        PanelResultCodeArea.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        PanelTopButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        
+        add(BorderLayout.NORTH, PanelTopButtons);
+        add(BorderLayout.CENTER, PanelCodeArea);
+        add(BorderLayout.SOUTH, PanelResultCodeArea);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null); 
     }
     
     

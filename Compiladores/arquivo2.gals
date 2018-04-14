@@ -5,9 +5,10 @@ Language = Java
 ScannerName = Lexico
 ParserName = Sintatico
 SemanticName = Semantico
+Package = compiler
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = Stream
+Input = String
 Parser = SLR
 #RegularDefinitions
 variable: [_a-zA-Z][a-zA-Z0-9_]*
