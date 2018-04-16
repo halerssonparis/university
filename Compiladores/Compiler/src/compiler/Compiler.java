@@ -8,8 +8,8 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class Compiler {
     private Ide ide;
-    private Sintatico syntatic;
-    private Semantico semantic;
+    private Sintatico syntatic = new Sintatico();
+    private Semantico semantic = new Semantico();
             
     public Compiler() {
         try {
@@ -25,17 +25,17 @@ public class Compiler {
              
              ide.onExecute((program) -> {
                  Lexico lexical = new Lexico(program);
-                 ide.displayValue(program);
-                 /*try {
+                 //ide.displayValue(program);
+                 try {
                      syntatic.parse(lexical, semantic);
                      
-                     ide.displayValue(program);
+                     ide.displayValue("it's work!");
                      
                  } catch (LexicalError | SyntaticError | SemanticError ex) {
                      ide.displayError(ex.getMessage());
                  }
-             });*/
              });
+             //});
              ide.setVisible(true);
          });   
     }
