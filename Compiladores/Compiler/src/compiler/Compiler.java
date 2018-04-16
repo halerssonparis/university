@@ -8,7 +8,9 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class Compiler {
     private Ide ide;
-    
+    private Sintatico syntatic;
+    private Semantico semantic;
+            
     public Compiler() {
         try {
             UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -16,26 +18,24 @@ public class Compiler {
             Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
+        semantic = new Semantico();
         
         java.awt.EventQueue.invokeLater(() -> {
              ide = new Ide();
              
              ide.onExecute((program) -> {
                  Lexico lexical = new Lexico(program);
-                 
-                 /*console_result = "";
-                 try {
-                     variables.clear();
-                     syntactic.parse(lexical, semantic);
+                 ide.displayValue(program);
+                 /*try {
+                     syntatic.parse(lexical, semantic);
                      
-                     ide.displayOutput(console_result);
-                 } catch (LexicalError | SemanticError | SyntaticError ex) {
-                     console_result = ex.getMessage();
-                     ide.displayError(console_result);
-                 }*/
+                     ide.displayValue(program);
+                     
+                 } catch (LexicalError | SyntaticError | SemanticError ex) {
+                     ide.displayError(ex.getMessage());
+                 }
+             });*/
              });
-             
              ide.setVisible(true);
          });   
     }
