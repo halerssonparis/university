@@ -1,33 +1,49 @@
+{
+
 int a(int b) {
 
-	int a,b,c = 523;
+	// VARIAVEIS
+	int a,b,c = 0xffff;
+	int a,b,c;
+	char b[ 2 ], c[ 2 ], value[ x + 10];
 
-	for (int t = a+b; int c = a+b%funct(); i < abc; i++; i=func()) {
-		a = i+a;
+
+	// IF'S 
+	if (-x + 8.8 - !x * 2 / ~y % 3 << 7 != y >> 3 || (x <= 3 && y > 8) | p & (h ^ g)) {
+		return a + b;
+	}
+	elseif (-x + 8.8 - !x * 2 / ~y % 3 << 7 != y >> 3 || (x <= 3 && y > 8) | p & (h ^ g)) {
+		return a - ( 5 << 2);
+	}
+	else {
+		return 1;
 	}
 
+
+	// LAÇO DE REPETIÇÃO
+	for ( int i = 0; i < tam; i++) {
+		i = i + 1;
+	}
+	while ( a > 5 ) {
+		i = i + 1;
+	}
 	do {
-		int a = a+b;
 
-	}while( i < 5)
+		int a,b,c;
 
+	}while ( a < 5; a++)
 
-	while ( a < b ) {
+	// ENTRADA
+	echo olamundo;
+	put a[ 2 ];
 
-		return a + funcao();
-	}
-
-	int a = func((int b, int c) => {
-		return 5;	
-	});
-
-	return 1;
-}
-
-int function2(int callback, int a) {
-
-
-	return callback(a+1, 2);
-}
-
+	minhafunction(a + 2, c [ 3 + 2]);
 	
+}
+
+int minhafunction( int a = 2 , int cb[ TAM ]) {
+
+	return cb(a + 5);
+}
+
+}
