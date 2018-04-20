@@ -54,7 +54,7 @@ public class Ide extends JFrame{
     private final JButton buttonCompile = new JButton("Compile");
     
     public void onExecute(Consumer<String> executionConsumer) {
-        buttonExecute.addActionListener((event) -> {
+        buttonCompile.addActionListener((event) -> {
             executionConsumer.accept(codeArea.getText());
         });
     }

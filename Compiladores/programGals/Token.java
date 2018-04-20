@@ -1,3 +1,5 @@
+package compiler;
+
 public class Token
 {
     private int id;
