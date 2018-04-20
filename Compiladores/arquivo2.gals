@@ -8,7 +8,7 @@ SemanticName = Semantico
 Package = compiler
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = String
+Input = Stream
 Parser = SLR
 #RegularDefinitions
 variable: [_a-zA-Z][a-zA-Z0-9_]*
@@ -99,6 +99,7 @@ put = variable : "put"
 comment_line: {comment_single_line}
 comment_multi_lines: {comment_multi_line}
 #NonTerminals
+<INIT>
 <__FUNCTION__>
 <TYPE>
 
@@ -162,6 +163,7 @@ comment_multi_lines: {comment_multi_line}
 //TERMINO DO CODIGO DO P.
 #Grammar
 //PROGRAMA INICIA COM UMA FUNCAO 
+<INIT> ::= "{" <INIT> "}"
 <__FUNCTION__> ::= <__FUNCTION__> <TYPE> variable "(" <PARAMS_TYPE> ")" "{" <CMD_LIST> "}" | î;
 
 <TYPE> ::= int | float | string | char | byte | unsigned | long | bool | void;
