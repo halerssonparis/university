@@ -82,12 +82,16 @@ public class Ide extends JFrame{
                 try {
                     FileReader reader = new FileReader(file.getPath());
                     BufferedReader bf = new BufferedReader(reader);
-                    String str = null;
+                    String str = "";
                     
-                    while(bf.readLine() != null) {
-                        codeArea.append(bf.readLine());
-                        codeArea.append("\n");
+                    
+                    while(bf.ready()) {
+                        str += bf.readLine();
+                        str += "\n";
+                        //codeArea.append(bf.readLine());
+                        //codeArea.append("\n");
                     }
+                    codeArea.setText(str);
                     bf.close();
                     this.setTitle("Eleonora    > " + file.getPath());
                     
@@ -104,8 +108,14 @@ public class Ide extends JFrame{
             }
             else {
                 try {
+                    String path = file.getPath();
+                    file.delete();
+                    file = new File(path);
+                    file.createNewFile();
+                    
                     FileWriter fileWrite = new FileWriter(file.getAbsoluteFile(), true);
                     codeArea.write(fileWrite);
+                    fileWrite.close();
                 } catch (IOException ex) {
                     Logger.getLogger(Ide.class.getName()).log(Level.SEVERE, null, ex);
                 }
