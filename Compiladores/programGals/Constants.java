@@ -9,7 +9,7 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_variable = 3;
     int t_binary = 4;
     int t_number_float = 5;
-    int t_hexa_decimal = 6;
+    int t_hexa_decima = 6;
     int t_int = 7;
     int t_float = 8;
     int t_string = 9;
@@ -69,5 +69,6 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_put = 63;
     int t_comment_line = 64;
     int t_comment_multi_lines = 65;
+    int t_w = 66;
 
 }

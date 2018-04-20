@@ -151,7 +151,7 @@ public class Ide extends JFrame{
             Logger.getLogger(Ide.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        this.setSize(700, 500);
+        this.setSize(700, 650);
         //this.setMinimumSize(new Dimension(700, 500));
         this.setResizable(false);
         
@@ -168,7 +168,7 @@ public class Ide extends JFrame{
         
         codeArea.setLineWrap(false);
         codeArea.setColumns(5);
-        codeArea.setRows(15);
+        codeArea.setRows(25);
         
         resultCodeArea.setEditable(false);
         resultCodeArea.setLineWrap(true);

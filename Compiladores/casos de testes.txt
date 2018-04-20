@@ -1,49 +1,63 @@
 {
 
-int a(int b) {
+int funcao1(int a[10]) {
 
-	// VARIAVEIS
-	int a,b,c = 0xffff;
-	int a,b,c;
-	char b[ 2 ], c[ 2 ], value[ x + 10];
+  if( a[0] > a[1] ) {
+    int i;
+    for(int i = 0; i < 10; i++) {
+       a[i] = a[10-i-1] * a[i];
+    }
+  }
+
+  if( a[5] > a[10] ) {
+    while(i > 0 && x != 10) {
+      i = x - 1;
+    }
+  } else {
+    do {
+      x = i * y;
+    } while( x + 1 * 2 -3 || y && 4 )
+  }
 
 
-	// IF'S 
-	if (-x + 8.8 - !x * 2 / ~y % 3 << 7 != y >> 3 || (x <= 3 && y > 8) | p & (h ^ g)) {
-		return a + b;
-	}
-	elseif (-x + 8.8 - !x * 2 / ~y % 3 << 7 != y >> 3 || (x <= 3 && y > 8) | p & (h ^ g)) {
-		return a - ( 5 << 2);
-	}
-	else {
-		return 1;
-	}
-
-
-	// LAÇO DE REPETIÇÃO
-	for ( int i = 0; i < tam; i++) {
-		i = i + 1;
-	}
-	while ( a > 5 ) {
-		i = i + 1;
-	}
-	do {
-
-		int a,b,c;
-
-	}while ( a < 5; a++)
-
-	// ENTRADA
-	echo olamundo;
-	put a[ 2 ];
-
-	minhafunction(a + 2, c [ 3 + 2]);
-	
+  return x;
 }
 
-int minhafunction( int a = 2 , int cb[ TAM ]) {
+int funcao2(float a, char b) {
 
-	return cb(a + 5);
+  return a * b;
+}
+
+void oi() {
+  echo "a";
+}
+
+int main() {
+
+  oi();
+
+  
+  int a,b;
+  
+  put a;
+  b = a * 2;
+
+  vet[0] = a;
+
+  vet[5] = b;
+
+  vet[9] = vet[1] + vet[2];
+
+  vet[7] = funcao1(vet);
+
+  int vet[10];
+  
+  c = a + b + vet[7];
+
+  a = funcao2(c,b);
+
+  echo "O resultado é: " + a + b;
+  
 }
 
 }

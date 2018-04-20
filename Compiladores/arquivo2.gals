@@ -20,7 +20,7 @@ bitwise: (<<|>>|&|\||~|\^)
 comment_multi_line: /\*[^\*]*\**([^/\*][^\*]*\*+)?/
 comment_single_line: (/)/.*
 hexa_decimal: [0-9A-F]x[0-9A-Fa-f]*
-words: [^\"]*
+words: \"[^\n\"]* (\\\")* \"
 #Tokens
 numbers: {numbers}
 variable : {variable}
@@ -91,6 +91,7 @@ case = variable : "case"
 "->"
 "++"
 "--"
+"'"
 
 end_line : ";"
 echo = variable : "echo"
@@ -98,6 +99,7 @@ put = variable : "put"
 
 comment_line: {comment_single_line}
 comment_multi_lines: {comment_multi_line}
+w: {words}
 #NonTerminals
 <INIT>
 <__FUNCTION__>
@@ -138,7 +140,8 @@ comment_multi_lines: {comment_multi_line}
 
 <DATA_ENTRY>
 <TYPE_ENTRY>
-
+<T>
+<V>
 //CODIGO DO PROFESSOR
 <exp>
 <exp1>
@@ -178,7 +181,7 @@ comment_multi_lines: {comment_multi_line}
 
 //CORPO DA FUNCAO
 <CMD_LIST> ::=  <VARIABLE_DECLARATION> ";" <CMD_LIST> | <REPEAT_LOOP> <CMD_LIST> |  <IF> <CMD_LIST> | <CMD_LIST2>;
-<CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <exp> ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
+<CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <V> ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
 <CMD_LIST3> ::= <ID_TYPES> <ASSIGN>";" <CMD_LIST> | variable"(" <exp11> ")" ";" <CMD_LIST> | î;
 
 <COMMENTS> ::= comment_multi_lines | comment_line;
@@ -208,8 +211,10 @@ comment_multi_lines: {comment_multi_line}
 <ELSE> ::= else "{" <CMD_LIST> "}" | î;
 
 //LEITURA E ESCRITA
-<DATA_ENTRY> ::= <TYPE_ENTRY> <exp> ";";
-<TYPE_ENTRY> ::= put | echo;
+
+<DATA_ENTRY> ::=  put <exp> ";" | echo <V> <T> ";";
+<T> ::= <T> "+" <V> |î;
+<V> ::= <exp> | w;
 
 //CODIGO DO PROFESSOR
 <exp>  ::= <exp> "||" <exp1> | <exp1>;
