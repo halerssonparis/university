@@ -84,7 +84,7 @@ public class Ide extends JFrame{
                     BufferedReader bf = new BufferedReader(reader);
                     String str = "";
                     
-                    
+                    System.out.println(file);
                     while(bf.ready()) {
                         str += bf.readLine();
                         str += "\n";
@@ -104,7 +104,23 @@ public class Ide extends JFrame{
         
         item2.addActionListener((ActionEvent ae) -> {
             if (file == null){
-                JOptionPane.showMessageDialog(null, "Por favor, abra um arquivo.");
+                JFileChooser chooserSaveFile = new JFileChooser();
+                
+                chooserSaveFile.setCurrentDirectory(new File("/home"));
+                
+                if (chooserSaveFile.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        FileWriter fw = new FileWriter(chooserSaveFile.getSelectedFile());
+                        codeArea.write(fw);
+                        file = chooserSaveFile.getSelectedFile();
+                        this.setTitle("Eleonora    > " + file.getPath());
+                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(Ide.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+               
             }
             else {
                 try {
