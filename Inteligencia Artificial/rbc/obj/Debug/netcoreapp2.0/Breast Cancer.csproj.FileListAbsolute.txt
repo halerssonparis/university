@@ -1,0 +1,10 @@
+/home/concatto/Breast Cancer/obj/Debug/netcoreapp2.0/Breast Cancer.csproj.CoreCompileInputs.cache
+/home/concatto/Breast Cancer/obj/Debug/netcoreapp2.0/Breast Cancer.AssemblyInfoInputs.cache
+/home/concatto/Breast Cancer/obj/Debug/netcoreapp2.0/Breast Cancer.AssemblyInfo.cs
+/home/concatto/Breast Cancer/bin/Debug/netcoreapp2.0/Breast Cancer.deps.json
+/home/concatto/Breast Cancer/bin/Debug/netcoreapp2.0/Breast Cancer.runtimeconfig.json
+/home/concatto/Breast Cancer/bin/Debug/netcoreapp2.0/Breast Cancer.runtimeconfig.dev.json
+/home/concatto/Breast Cancer/bin/Debug/netcoreapp2.0/Breast Cancer.dll
+/home/concatto/Breast Cancer/bin/Debug/netcoreapp2.0/Breast Cancer.pdb
+/home/concatto/Breast Cancer/obj/Debug/netcoreapp2.0/Breast Cancer.dll
+/home/concatto/Breast Cancer/obj/Debug/netcoreapp2.0/Breast Cancer.pdb
