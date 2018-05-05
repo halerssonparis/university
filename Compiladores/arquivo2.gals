@@ -169,54 +169,55 @@ w: {words}
 #Grammar
 //PROGRAMA INICIA COM UMA FUNCAO 
 <INIT> ::= "{" <__FUNCTION__> "}";
-<__FUNCTION__> ::= <__FUNCTION__> <TYPE> variable#2 "(" <PARAMS_TYPE> ")" "{" <CMD_LIST> "}" | î;
+<__FUNCTION__> ::= <__FUNCTION__> <TYPE> variable #2 "(" <PARAMS_TYPE> ")"#8 "{" <CMD_LIST> "}"#9 | î;
 
 <TYPE> ::= int #1 | float #1 | string #1 | char #1 | byte #1 | unsigned #1 | long #1 | bool #1 | void #1;
 
 //PARAMENTROS (ISSO É PARA INICIAR FUNCOES) 
-<PARAMS_TYPE> ::=  <ID_PARAMS> <PARAMS_LIST>| î;
+<PARAMS_TYPE> ::=  <ID_PARAMS> <PARAMS_LIST> #3| î #4;
 <PARAMS_LIST> ::= "," <ID_PARAMS> <PARAMS_LIST> | î;
-<ID_PARAMS> ::= <TYPE> <ID_TYPES> | <LAMBDA>;
+<ID_PARAMS> ::= <TYPE> <ID_TYPES> #5 | <LAMBDA>;
 
 //lambda retorna qualquer <TYPE>, é pra ser generico mesmo
 <LAMBDA> ::= "(" <PARAMS_TYPE> ")" "=>" "{" <CMD_LIST> "}";
 
 //CORPO DA FUNCAO
-<CMD_LIST> ::=  <VARIABLE_DECLARATION> ";" <CMD_LIST> | <REPEAT_LOOP> <CMD_LIST> |  <IF> <CMD_LIST> | <CMD_LIST2>;
+<CMD_LIST> ::=  <VARIABLE_DECLARATION>#10 ";" <CMD_LIST> | <REPEAT_LOOP> <CMD_LIST> |  <IF> <CMD_LIST> | <CMD_LIST2>;
 <CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <V> ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
 <CMD_LIST3> ::= <ID_TYPES> <ASSIGN>";" <CMD_LIST> | variable"(" <exp11> ")" ";" <CMD_LIST> | î;
 
 <COMMENTS> ::= comment_multi_lines | comment_line;
 //BLOCOS DE INSTRUCAO
-<ASSIGN> ::= "=" <exp> | "=" w #13| "=" true #16 | "=" false #17;
-
+<ASSIGN> ::= "=" <exp> | "=" w | "=" true | "=" false;
+ 
 
 //DECLARACAO DE VARIAVEL
 <VARIABLE_DECLARATION> ::= <TYPE> <VAR_LIST> | <TYPE> <VAR_LIST> <ASSIGN>;
 <VAR_LIST> ::= <VAR_LIST> "," <ID_TYPES> | <ID_TYPES>; //| <ASSIGN> | <VAR_LIST><ASSING>;
-<ID_TYPES> ::= variable #3 | variable #4"[" <exp> "]";
+<ID_TYPES> ::= variable #6 | variable #7 "[" <exp> "]";
+
 
 //LACOS DE REPETICOES
 <REPEAT_LOOP> ::= <DO_LOOP> | <FOR_LOOP> | <WHILE_LOOP>;
-<DO_LOOP> ::= do #5 "{" <CMD_LIST> "}" while "(" <LOOP_COND_LIST> ")";
-<FOR_LOOP> ::= for #6 "(" <LOOP_DEC_LIST> ")" "{" <CMD_LIST> "}";
-<WHILE_LOOP> ::= while #7"(" <LOOP_COND_LIST> ")" "{" <CMD_LIST> "}";
+<DO_LOOP> ::= do "{" <CMD_LIST> "}" while "(" <LOOP_COND_LIST> ")";
+<FOR_LOOP> ::= for "(" <LOOP_DEC_LIST> ")" "{" <CMD_LIST> "}";
+<WHILE_LOOP> ::= while "(" <LOOP_COND_LIST> ")" "{" <CMD_LIST> "}";
 
 <LOOP_DEC_LIST> ::= <VARIABLE_DECLARATION> ";" <LOOP_DEC_LIST> | <LOOP_COND_LIST>;
 <LOOP_COND_LIST> ::= <exp> <LOOP_ATRIB_LIST> | <exp> ";" <LOOP_COND_LIST> ;
 <LOOP_ATRIB_LIST> ::= <LOOP_ATRIB_LIST> ";" <ID_TYPES> <LOOP_ATRIB_TYPE> | î ; // <VAR_LIST> <ASSIGN>;
-<LOOP_ATRIB_TYPE> ::= <ASSIGN> | "++" #14 | "--" #15;
+<LOOP_ATRIB_TYPE> ::= <ASSIGN> | "++" | "--";
 
 //IF
-<IF> ::= if #8 "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> <ELSE>;
-<ELSE_IF> ::= else_if #9 "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> | î;
-<ELSE> ::= else #10 "{" <CMD_LIST> "}" | î;
+<IF> ::= if  "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> <ELSE>;
+<ELSE_IF> ::= else_if  "(" <exp> ")" "{" <CMD_LIST> "}" <ELSE_IF> | î;
+<ELSE> ::= else  "{" <CMD_LIST> "}" | î;
 
 //LEITURA E ESCRITA
 
-<DATA_ENTRY> ::=  put #11 <exp> ";" | echo #12 <V> <T> ";";
+<DATA_ENTRY> ::=  put <exp> ";" | echo <V> <T> ";";
 <T> ::= <T> "+" <V> |î;
-<V> ::= <exp> | w #13;
+<V> ::= <exp> | w ;
 
 //CODIGO DO PROFESSOR
 <exp>  ::= <exp> "||" <exp1> | <exp1>;

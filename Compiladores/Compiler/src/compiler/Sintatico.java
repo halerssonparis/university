@@ -10,7 +10,7 @@ public class Sintatico implements Constants
     private Lexico scanner;
     private Semantico semanticAnalyser;
 
-    public void parse(Lexico scanner, Semantico semanticAnalyser) throws LexicalError, SyntaticError, SemanticError
+    public void parse(Lexico scanner, Semantico semanticAnalyser) throws LexicalError, SyntaticError, SemanticError, Exception
     {
         this.scanner = scanner;
         this.semanticAnalyser = semanticAnalyser;
@@ -24,7 +24,7 @@ public class Sintatico implements Constants
             ;
     }
 
-    private boolean step() throws LexicalError, SyntaticError, SemanticError
+    private boolean step() throws LexicalError, SyntaticError, SemanticError, Exception
     {
         if (currentToken == null)
         {
