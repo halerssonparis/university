@@ -12,6 +12,24 @@ public class Semantico implements Constants
     
     Symbol actualSymbol = new Symbol();
     
+    public void clearTable() {
+        //this.symbolTable = new ArrayList<>();
+        
+        for (Symbol s : symbolTable) {
+            System.out.println(s.type);
+            System.out.println(s.id);
+            System.out.println(s.initialized);
+            System.out.println(s.used);
+            System.out.println(s.params);
+            System.out.println(s.params_position);
+            System.out.println(s.vector);
+            System.out.println(s.scope);
+            System.out.println(s.matriz);
+            System.out.println(s.function);
+            
+        }
+    }
+    
     public List<Symbol> getList () {
         return this.symbolTable;
     }
@@ -26,9 +44,11 @@ public class Semantico implements Constants
     }
     
     public boolean verifyExistingVariable(String variableName) {
-        for (Symbol b : symbolTable) {
-            if (b.id.equals(variableName)) {
-                return true;
+        if (!symbolTable.isEmpty()) {
+            for (Symbol b : symbolTable) {
+                if (b.id == variableName) {
+                    return true;
+                }
             }
         }
         return false;
@@ -40,7 +60,9 @@ public class Semantico implements Constants
             // 1 - 9 Trata de Funções
             case 1: 
                 actualSymbol.type = token.getLexeme();
+                
             case 2:
+                System.out.println("eu::: " + token.getLexeme() + token.getId());
                 if (verifyExistingVariable(token.getLexeme())) {
                     throw new Exception("Função já existente!");
                 }
@@ -48,21 +70,27 @@ public class Semantico implements Constants
                 actualSymbol.id = token.getLexeme();
                 actualSymbol.function = true;
                 actualSymbol.scope++;
+                
             case 3:
                 //funcao estao recebendo parametros
                 actualSymbol.params = true;
                 addSymboltoList();
+                
             case 4:
                 //funcao nao esta recebendo parametros
                 addSymboltoList();
+               
             case 5:
                 actualSymbol.params_position = params_position;
                 params_position++;
                 actualSymbol.scope = this.scope;
+                
             case 6:
+                
                 if (verifyExistingVariable(token.getLexeme())) {
                     throw new Exception("Nome já existente!");
                 }
+                
                 actualSymbol.id = token.getLexeme();
                 addSymboltoList();
             case 7:

@@ -35,36 +35,27 @@ public class SymbolTableUI extends JFrame{
         String[] names = {"Type", "id", "Init", "Used", "Scope", "Params", "Pos", "Vet", "Matriz", "Function"};
         //Object[][] data = {{"int", "a", "F", "T", "1", "F", "2", "T", "F", "T"}};
         
-        Object[][] data = new Object[1][symbolList.size()];
-                
-        for (Symbol s : symbolList) {
-            /*
-            boolean initialized;
-            boolean used;
-            int scope;
-            boolean params;
-            int params_position;
-            boolean vector;
-            boolean matriz;
-            //public boolean reference;
-            boolean function;*/
-            //String[] names = {"Type", "id", "Init", "Used", "Scope", "Params", "Pos", "Vet", "Matris", "Function"};
-            Object[] ndata = {
-                s.type, 
-                s.id, 
-                String.valueOf(s.initialized),
-                String.valueOf(s.used),
-                String.valueOf(s.scope),
-                String.valueOf(s.params),
-                String.valueOf(s.params_position),
-                String.valueOf(s.vector),
-                String.valueOf(s.matriz),
-                String.valueOf(s.function)
-            }; 
-            data[0] = ndata;
+        System.out.println(symbolList.size());
+        
+        Object[][] data = new Object[symbolList.size()][12];
+              
+        for (int i = 0; i < symbolList.size(); i++) {
+            
+            Object[] newData = {
+                symbolList.get(i).type, 
+                symbolList.get(i).id, 
+                String.valueOf(symbolList.get(i).initialized),
+                String.valueOf(symbolList.get(i).used),
+                String.valueOf(symbolList.get(i).scope),
+                String.valueOf(symbolList.get(i).params),
+                String.valueOf(symbolList.get(i).params_position),
+                String.valueOf(symbolList.get(i).vector),
+                String.valueOf(symbolList.get(i).matriz),
+                String.valueOf(symbolList.get(i).function)
+            };
+            
+            data[i] = newData;
         }
-        
-        
         
         JTable table = new JTable(data, names);
         JScrollPane scrollPane = new JScrollPane(table);
