@@ -33,7 +33,13 @@ public class Compiler {
                      
                  } catch (LexicalError | SyntaticError | SemanticError ex) {
                      ide.displayError(ex.getMessage());
+                 } catch (Exception ex) {
+                     Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
                  }
+             });
+             
+             ide.onOpenTable( b -> {
+                 SymbolTableUI tableSymbolUI = new SymbolTableUI(semantic.getList());
              });
              //});
              ide.setVisible(true);

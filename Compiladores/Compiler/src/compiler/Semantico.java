@@ -12,6 +12,9 @@ public class Semantico implements Constants
     
     Symbol actualSymbol = new Symbol();
     
+    public List<Symbol> getList () {
+        return this.symbolTable;
+    }
     
     public void flush() {
        this.actualSymbol = new Symbol();

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -40,9 +42,13 @@ public class Ide extends JFrame{
     
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu menu = new JMenu("files");
+    private final JMenu menuTable = new JMenu("Tools");
+    
     private final JMenuItem item1 = new JMenuItem("Open File");
     private final JMenuItem item2 = new JMenuItem("Save File");
     private final JMenuItem item3 = new JMenuItem("About");
+    
+    private final JMenuItem itemTable = new JMenuItem("Symbol Table");
     
     private final JTextArea codeArea = new JTextArea();
     private final JTextArea resultCodeArea = new JTextArea();
@@ -56,6 +62,12 @@ public class Ide extends JFrame{
     public void onExecute(Consumer<String> executionConsumer) {
         buttonCompile.addActionListener((event) -> {
             executionConsumer.accept(codeArea.getText());
+        });
+    }
+    
+    public void onOpenTable(Consumer<Boolean> b) {
+        itemTable.addActionListener((ActionEvent ev) -> {
+            b.accept(true);
         });
     }
     
@@ -161,9 +173,12 @@ public class Ide extends JFrame{
         initActionListenersButtons();
         
         menuBar.add(menu);
+        menuBar.add(menuTable);
+        
         menu.add(item1);
         menu.add(item2);
         menu.add(item3);
+        menuTable.add(itemTable);
         panelMenuBar.add(menuBar);
         
         codeArea.setLineWrap(false);
