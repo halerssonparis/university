@@ -7,8 +7,14 @@ import java.util.Stack;
 
 public class Semantico implements Constants
 {
+    private SemanticTable semanticTable = new SemanticTable();
+    
     private List<Symbol> symbolTable =  new ArrayList<>();
+    
     private Stack actualScope = new Stack();
+    private Stack expStack = new Stack();
+    private Stack operation = new Stack();
+    
     private int scope = 0;
     private int params_position = 0;
     
@@ -81,8 +87,6 @@ public class Semantico implements Constants
                 
                 break;
             case 3:
-                //funcao estao recebendo parametros
-                actualSymbol.params = true;
                 addSymboltoList();
                 break;
             case 4:
@@ -93,6 +97,7 @@ public class Semantico implements Constants
                 params_position++;
                 actualSymbol.params_position = params_position;
                 actualSymbol.scope = (int) actualScope.lastElement();
+                actualSymbol.params = true;
                 break;
             case 6:
                 
@@ -126,7 +131,7 @@ public class Semantico implements Constants
                 actualSymbol.scope = (int) actualScope.lastElement();
                 break; 
                
-            //LOOP'S
+            //LOOP'S 15-?
             case 15:
                 flush();
                 this.scope++;
@@ -134,7 +139,81 @@ public class Semantico implements Constants
                 
                 break;
             case 16:
+                break;
                 
+            // exp 50 - ?
+            case 50:
+                expStack.push(SemanticTable.FLO);
+                break;
+            case 51:
+                expStack.push(SemanticTable.INT);
+                break;
+            case 52: 
+                // binario
+                break;
+            case 53:
+                if (!symbolTable.isEmpty()) {
+                    for (Symbol b : symbolTable) {
+                        if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
+                            switch (b.type) {
+                                case "int":
+                                    expStack.push(0);
+                                    break;
+                                case "float":
+                                    expStack.push(1);
+                                    break;
+                                case "char":
+                                    expStack.push(2);
+                                    break;
+                                case "string":
+                                    expStack.push(3);
+                                    break;
+                                case "boolean":
+                                    expStack.push(4);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+                
+                break;
+            
+            case 54:
+                break;
+                
+            case 75:
+                expStack.push(0);
+                break;
+            case 76:
+                expStack.push(1);
+                break;
+            case 77:
+                expStack.push(2);
+                break;
+            case 78: 
+                expStack.push(3);
+                break;
+            case 79:
+                break;
+            case 80:
+                int num1 = (int) expStack.pop();
+                int op = (int) expStack.pop();
+                int num2 = (int) expStack.pop();
+                
+                int result = SemanticTable.resultType(num1, num2, op);
+                switch(result) {
+                    case 0:
+                        expStack.push(result);
+                        break;
+                    case 1: 
+                        expStack.push(result);
+                        break;
+                        //TINHA QUE MOSTRAR WARNING, N SEI COMO VOU FAZER ISSO!
+                    case 2: 
+                        throw new Exception("Expressão mal formulada");
+                }
         }
     }	
 }
