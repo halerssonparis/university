@@ -34,11 +34,9 @@ public class Compiler {
                      
                      ide.displayValue("it's work!");
                      
-                 } catch (LexicalError | SyntaticError | SemanticError ex) {
-                     ide.displayError(ex.getMessage());
                  } catch (Exception ex) {
-                     Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
-                 }
+                     ide.displayError(ex.getMessage());
+                 } 
              });
              
              ide.onOpenTable( b -> {

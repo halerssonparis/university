@@ -43,6 +43,26 @@ public class Semantico implements Constants
         }*/
     }
     
+    private boolean executeExp() {
+        int num1 = (int) expStack.pop();
+        int op = (int) expStack.pop();
+        int num2 = (int) expStack.pop();
+
+        int result = SemanticTable.resultType(num1, num2, op);
+        switch(result) {
+            case 0:
+                expStack.push(result);
+                return true;
+            case 1: 
+                expStack.push(result);
+                return true;
+                //TINHA QUE MOSTRAR WARNING, N SEI COMO VOU FAZER ISSO!
+            case 2: 
+                return false;
+        }
+        return false;
+    }
+    
     public List<Symbol> getList () {
         return this.symbolTable;
     }
@@ -136,9 +156,19 @@ public class Semantico implements Constants
                 flush();
                 this.scope++;
                 this.actualScope.push(this.scope);
-                
                 break;
             case 16:
+                this.actualScope.pop();
+                break;
+            case 17:
+                flush();
+                this.scope++;
+                this.actualScope.push(this.scope);
+                break;
+            case 18:
+                flush();
+                this.scope++;
+                this.actualScope.push(this.scope);
                 break;
                 
             // exp 50 - ?
@@ -152,32 +182,29 @@ public class Semantico implements Constants
                 // binario
                 break;
             case 53:
-                if (!symbolTable.isEmpty()) {
-                    for (Symbol b : symbolTable) {
-                        if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
-                            switch (b.type) {
-                                case "int":
-                                    expStack.push(0);
-                                    break;
-                                case "float":
-                                    expStack.push(1);
-                                    break;
-                                case "char":
-                                    expStack.push(2);
-                                    break;
-                                case "string":
-                                    expStack.push(3);
-                                    break;
-                                case "boolean":
-                                    expStack.push(4);
-                                    break;
-                                default:
-                                    break;
-                            }
+                for (Symbol b : symbolTable) {
+                    if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
+                        switch (b.type) {
+                            case "int":
+                                expStack.push(0);
+                                break;
+                            case "float":
+                                expStack.push(1);
+                                break;
+                            case "char":
+                                expStack.push(2);
+                                break;
+                            case "string":
+                                expStack.push(3);
+                                break;
+                            case "boolean":
+                                expStack.push(4);
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
-                
                 break;
             
             case 54:
@@ -198,22 +225,10 @@ public class Semantico implements Constants
             case 79:
                 break;
             case 80:
-                int num1 = (int) expStack.pop();
-                int op = (int) expStack.pop();
-                int num2 = (int) expStack.pop();
-                
-                int result = SemanticTable.resultType(num1, num2, op);
-                switch(result) {
-                    case 0:
-                        expStack.push(result);
-                        break;
-                    case 1: 
-                        expStack.push(result);
-                        break;
-                        //TINHA QUE MOSTRAR WARNING, N SEI COMO VOU FAZER ISSO!
-                    case 2: 
-                        throw new Exception("Expressão mal formulada");
+                if (!executeExp()) {
+                    throw new Exception("Expressão mal formulada");
                 }
+                break;
         }
     }	
 }
