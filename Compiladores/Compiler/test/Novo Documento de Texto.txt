@@ -57,13 +57,13 @@ public class Semantico implements Constants
     public void executeAction(int action, Token token)	throws SemanticError, Exception
     {
         switch(action) {
-            // 1 - 9 Trata de Fun√ß√µes
+            // 1 - 9 Trata de FunÁıes
             case 1: 
                 actualSymbol.type = token.getLexeme();
                 break;
             case 2:
                 if (verifyExistingVariable(token.getLexeme())) {
-                    throw new Exception("Fun√ß√£o j√° existente!");
+                    throw new Exception("FunÁ„o j· existente!");
                 }
                 
                 actualSymbol.id = token.getLexeme();
@@ -88,7 +88,7 @@ public class Semantico implements Constants
             case 6:
                 
                 /*if (verifyExistingVariable(token.getLexeme())) {
-                    throw new Exception("Nome j√° existente!");
+                    throw new Exception("Nome j· existente!");
                 }*/
                 
                 actualSymbol.id = token.getLexeme();
@@ -97,7 +97,7 @@ public class Semantico implements Constants
                 break;
             case 7:
                /* if (verifyExistingVariable(token.getLexeme())) {
-                    throw new Exception("Nome j√° existente!");
+                    throw new Exception("Nome j· existente!");
                 }*/
                 
                 actualSymbol.id = token.getLexeme();
@@ -112,7 +112,7 @@ public class Semantico implements Constants
                 //this.scope--;
                 break;
               
-            //10 - 10 se pah |  declara√ß√£o de variaveis 
+            //10 - 10 se pah |  declaraÁ„o de variaveis 
             case 10:
                 actualSymbol.scope = scope;
                 

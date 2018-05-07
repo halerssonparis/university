@@ -35,7 +35,9 @@ public class SymbolTableUI extends JFrame{
         String[] names = {"Type", "id", "Init", "Used", "Scope", "Params", "Pos", "Vet", "Matriz", "Function"};
         //Object[][] data = {{"int", "a", "F", "T", "1", "F", "2", "T", "F", "T"}};
         
-        Object[][] data = new Object[1][symbolList.size()];
+        System.out.println(symbolList.size());
+        
+        Object[][] data = new Object[symbolList.size()][12];
               
         for (int i = 0; i < symbolList.size(); i++) {
             

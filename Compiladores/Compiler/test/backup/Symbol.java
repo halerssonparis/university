@@ -17,17 +17,6 @@ public class Symbol {
     //public boolean reference;
     public boolean function;
     
-    Map<String, String> variaveis = new HashMap<String, String>();
-
-    void a () {
-        String id = "a";
-        String valor= "123";
-        String b = variaveis.get("a");
-        if ( new Symbol().type instanceof String){
-         
-        }
-    }
-    
     public Symbol() {
         this.type = "";
         this.id = "";

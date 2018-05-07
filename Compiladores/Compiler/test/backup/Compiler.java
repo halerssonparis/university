@@ -19,14 +19,17 @@ public class Compiler {
         }
         
         semantic = new Semantico();
+       
         
         java.awt.EventQueue.invokeLater(() -> {
              ide = new Ide();
              
              ide.onExecute((program) -> {
                  Lexico lexical = new Lexico(program);
+                 
                  //ide.displayValue(program);
                  try {
+                     semantic.clearTable();
                      syntatic.parse(lexical, semantic);
                      
                      ide.displayValue("it's work!");
