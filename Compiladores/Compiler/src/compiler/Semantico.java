@@ -208,6 +208,7 @@ public class Semantico implements Constants
                 break;
             
             case 54:
+                expStack.push(3);
                 break;
                 
             case 75:
@@ -228,24 +229,41 @@ public class Semantico implements Constants
                 if (!executeExp()) {
                     throw new Exception("Expressão mal formulada");
                 }
+                
+                break;
+                
+            case 81:
+                if (!executeExp()) {
+                    throw new Exception("Expressão mal formulada");
+                }
                 break;
         }
     }	
 }
 
 
-/*{
+/*
 
-int a ( int b, int c) {
 
-	char d;
+{
+
+int a () {
+
+	if ( 1 + 1 ) {
+		int b;
+	
+	}
+
+	int b;
+}
+
+int b () {
+
+
+
 }
 
 
-int new ( int x )  {
 
-
-	char bos;
-}
 }
 */

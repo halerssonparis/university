@@ -156,9 +156,19 @@ public class Semantico implements Constants
                 flush();
                 this.scope++;
                 this.actualScope.push(this.scope);
-                
                 break;
             case 16:
+                this.actualScope.pop();
+                break;
+            case 17:
+                flush();
+                this.scope++;
+                this.actualScope.push(this.scope);
+                break;
+            case 18:
+                flush();
+                this.scope++;
+                this.actualScope.push(this.scope);
                 break;
                 
             // exp 50 - ?
@@ -172,35 +182,33 @@ public class Semantico implements Constants
                 // binario
                 break;
             case 53:
-                if (!symbolTable.isEmpty()) {
-                    for (Symbol b : symbolTable) {
-                        if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
-                            switch (b.type) {
-                                case "int":
-                                    expStack.push(0);
-                                    break;
-                                case "float":
-                                    expStack.push(1);
-                                    break;
-                                case "char":
-                                    expStack.push(2);
-                                    break;
-                                case "string":
-                                    expStack.push(3);
-                                    break;
-                                case "boolean":
-                                    expStack.push(4);
-                                    break;
-                                default:
-                                    break;
-                            }
+                for (Symbol b : symbolTable) {
+                    if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
+                        switch (b.type) {
+                            case "int":
+                                expStack.push(0);
+                                break;
+                            case "float":
+                                expStack.push(1);
+                                break;
+                            case "char":
+                                expStack.push(2);
+                                break;
+                            case "string":
+                                expStack.push(3);
+                                break;
+                            case "boolean":
+                                expStack.push(4);
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
-                
                 break;
             
             case 54:
+                expStack.push(3);
                 break;
                 
             case 75:
@@ -222,23 +230,38 @@ public class Semantico implements Constants
                     throw new Exception("Expressão mal formulada");
                 }
                 break;
+            case 81:
+                if (!executeExp()) {
+                    throw new Exception("Expressão mal formulada");
+                }
+                break;
         }
     }	
 }
 
 
-/*{
+/*
 
-int a ( int b, int c) {
 
-	char d;
+{
+
+int a () {
+
+	if ( 1 + 1 ) {
+		int b;
+	
+	}
+
+	int b;
+}
+
+int b () {
+
+
+
 }
 
 
-int new ( int x )  {
 
-
-	char bos;
-}
 }
 */
