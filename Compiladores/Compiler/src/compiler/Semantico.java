@@ -37,6 +37,8 @@ public class Semantico implements Constants
         this.operation = new Stack();
         this.signals = new Stack();
         
+        declarationAcu = "int";
+        
         /*for (Symbol s : symbolTable) {
             System.out.println(s.type);
             System.out.println(s.id);
@@ -361,7 +363,7 @@ public class Semantico implements Constants
                         declarationAcu = "int";
                         int expResultString = SemanticTable.atribType(3, (int) expStack.pop());
                         if (expResultString == 1) {
-                            //Wanign
+                            //Warnign
                         }
                         else if (expResultString == -1) {
                             throw new Exception("Atribuição invalida! --- Tipos não compativeis");

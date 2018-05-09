@@ -32,7 +32,7 @@ public class Compiler {
                      semantic.clearTable();
                      syntatic.parse(lexical, semantic);
                      
-                     ide.displayValue("it's work!");
+                     ide.displayValue("Sucesso ao compilar!");
                      
                  } catch (Exception ex) {
                      ide.displayError(ex.getMessage());
