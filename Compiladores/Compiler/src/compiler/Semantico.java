@@ -21,7 +21,7 @@ public class Semantico implements Constants
     
     Symbol actualSymbol = new Symbol();
     
-    String declarationAcu = "";
+    String declarationAcu = "int";
     String funcP = "";
     
     public void clearTable() {
@@ -328,6 +328,7 @@ public class Semantico implements Constants
             case 100:
                 switch (declarationAcu) {
                     case "int":
+                        declarationAcu = "int";
                         int expResult = SemanticTable.atribType(0, (int) expStack.pop());
                         if (expResult == 1) {
                             //Wanign
@@ -337,6 +338,7 @@ public class Semantico implements Constants
                         }
                         break;
                     case "float":
+                        declarationAcu = "int";
                         int expResultFloat = SemanticTable.atribType(1, (int) expStack.pop());
                         if (expResultFloat == 1) {
                             //Wanign
@@ -346,6 +348,7 @@ public class Semantico implements Constants
                         }
                         break;
                     case "char":
+                        declarationAcu = "int";
                         int expResultChar = SemanticTable.atribType(2, (int) expStack.pop());
                         if (expResultChar == 1) {
                             //Wanign
@@ -355,6 +358,7 @@ public class Semantico implements Constants
                         }
                         break;
                     case "string":
+                        declarationAcu = "int";
                         int expResultString = SemanticTable.atribType(3, (int) expStack.pop());
                         if (expResultString == 1) {
                             //Wanign
@@ -364,6 +368,7 @@ public class Semantico implements Constants
                         }
                         break;
                     case "boolean":
+                        declarationAcu = "int";
                         int expResultBool = SemanticTable.atribType(4, (int) expStack.pop());
                         if (expResultBool == 1) {
                             //Wanign
