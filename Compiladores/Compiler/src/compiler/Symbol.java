@@ -17,6 +17,8 @@ public class Symbol {
     //public boolean reference;
     public boolean function;
     
+    public String funcP;
+    
     public Symbol() {
         this.type = "";
         this.id = "";
@@ -28,5 +30,6 @@ public class Symbol {
         this.vector = false;
         this.matriz = false;
         this.function = false;
+        this.funcP = "";
     }
 }

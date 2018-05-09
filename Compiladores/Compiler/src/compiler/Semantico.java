@@ -21,13 +21,21 @@ public class Semantico implements Constants
     
     Symbol actualSymbol = new Symbol();
     
+    String declarationAcu = "";
+    String funcP = "";
+    
     public void clearTable() {
         this.symbolTable = new ArrayList<>();
-        this.params_position = 0;
         this.actualSymbol = new Symbol();
+        
+        this.params_position = 0;
         this.scope = 0;
         actualScope = new Stack();
         actualScope.push(scope);
+        
+        this.expStack = new Stack();
+        this.operation = new Stack();
+        this.signals = new Stack();
         
         /*for (Symbol s : symbolTable) {
             System.out.println(s.type);
@@ -88,7 +96,7 @@ public class Semantico implements Constants
     public boolean verifyExistingVariable(String variableName, int variableScope) {
         if (!symbolTable.isEmpty()) {
             for (Symbol b : symbolTable) {
-                if (b.id.equals(variableName) && b.scope <= variableScope) {
+                if (b.id.equals(variableName) && b.scope <= variableScope && b.funcP.equals(this.funcP)) {
                     return true;
                 }
             }
@@ -113,6 +121,8 @@ public class Semantico implements Constants
                 actualSymbol.scope = (int) actualScope.lastElement();
                 this.scope++;
                 this.actualScope.push(this.scope);
+                this.funcP = token.getLexeme();
+                actualSymbol.funcP = "Global";
                 
                 break;
             case 3:
@@ -127,6 +137,7 @@ public class Semantico implements Constants
                 actualSymbol.params_position = params_position;
                 actualSymbol.scope = (int) actualScope.lastElement();
                 actualSymbol.params = true;
+                actualSymbol.funcP = this.funcP;
                 break;
             case 6:
                 
@@ -134,8 +145,14 @@ public class Semantico implements Constants
                     throw new Exception("Váriavel já existente!");
                 }
                 
+                if (actualSymbol.type.equals("")) {
+                    //Trata casos como int a,b,c | b e c não vao ter tipo, dai adiciona o ultimo da tabela
+                    actualSymbol.type = symbolTable.get(symbolTable.size()-1).type;
+                }
+                
                 actualSymbol.id = token.getLexeme();
                 actualSymbol.scope = (int) actualScope.lastElement();
+                actualSymbol.funcP = this.funcP;
                 addSymboltoList();
                 break;
             case 7:
@@ -143,9 +160,15 @@ public class Semantico implements Constants
                     throw new Exception("Váriavel já existente!");
                 }
                 
+                if (actualSymbol.type.equals("")) {
+                    //Trata casos como int a,b,c | b e c não vao ter tipo, dai adiciona o ultimo da tabela
+                    actualSymbol.type = symbolTable.get(symbolTable.size() - 2).type;
+                }
+                
                 actualSymbol.id = token.getLexeme();
                 actualSymbol.vector = true;
                 actualSymbol.scope = (int) actualScope.lastElement();
+                actualSymbol.funcP = this.funcP;
                 addSymboltoList();
                 break;
             case 8:
@@ -192,46 +215,45 @@ public class Semantico implements Constants
                 break;
             case 53:
                 for (Symbol b : symbolTable) {
-                    if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement()) {
+                    if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement() && b.funcP.equals(this.funcP)) {
                         switch (b.type) {
                             case "int":
                                 if (!signals.isEmpty()) {
                                     signals.pop();
                                 }
                                 expStack.push(0);
-                                break;
+                                return;
                             case "float":
                                 if (!signals.isEmpty()) {
                                     signals.pop();
                                 }
                                 expStack.push(1);
-                                break;
+                                return;
                             case "char":
                                 if (!signals.isEmpty()) {
                                     throw new Exception("Não pode negar umas char");
                                 }
                                 expStack.push(2);
-                                break;
+                                return;
                             case "string":
                                 if (!signals.isEmpty()) {
                                     throw new Exception("Não pode negar umas string");
                                 }
                                 expStack.push(3);
-                                break;
+                                return;
                             case "boolean":
                                 if (!signals.lastElement().equals("!")) {
                                     throw new Exception("Não pode negar uma boolean");
                                 }
                                 signals.pop();
                                 expStack.push(4);
-                                break;
-                            default:
-                                break;
+                                return;
                         }
                     }
                 }
-                break;
-            
+                throw new Exception("Váriavel  '" + token.getLexeme() + "'  não declarada!");
+                
+                
             case 54:
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas string");
@@ -302,7 +324,65 @@ public class Semantico implements Constants
             case 84:
                 expStack.push(4);
                 break;
+                
+            case 100:
+                switch (declarationAcu) {
+                    case "int":
+                        int expResult = SemanticTable.atribType(0, (int) expStack.pop());
+                        if (expResult == 1) {
+                            //Wanign
+                        }
+                        else if (expResult == -1) {
+                            throw new Exception("Atribuição invalida! --- Tipos não compativeis");
+                        }
+                        break;
+                    case "float":
+                        int expResultFloat = SemanticTable.atribType(1, (int) expStack.pop());
+                        if (expResultFloat == 1) {
+                            //Wanign
+                        }
+                        else if (expResultFloat == -1) {
+                            throw new Exception("Atribuição invalida! --- Tipos não compativeis");
+                        }
+                        break;
+                    case "char":
+                        int expResultChar = SemanticTable.atribType(2, (int) expStack.pop());
+                        if (expResultChar == 1) {
+                            //Wanign
+                        }
+                        else if (expResultChar == -1) {
+                            throw new Exception("Atribuição invalida! --- Tipos não compativeis");
+                        }
+                        break;
+                    case "string":
+                        int expResultString = SemanticTable.atribType(3, (int) expStack.pop());
+                        if (expResultString == 1) {
+                            //Wanign
+                        }
+                        else if (expResultString == -1) {
+                            throw new Exception("Atribuição invalida! --- Tipos não compativeis");
+                        }
+                        break;
+                    case "boolean":
+                        int expResultBool = SemanticTable.atribType(4, (int) expStack.pop());
+                        if (expResultBool == 1) {
+                            //Wanign
+                        }
+                        else if (expResultBool == -1) {
+                            throw new Exception("Atribuição invalida! --- Tipos não compativeis");
+                        }
+                        break;
+                }
+                break;
             
+            case 101:
+                for (Symbol b : symbolTable) {
+                    if (b.id.equals(token.getLexeme())) {
+                        declarationAcu = b.type;
+                        return;
+                    }
+                }
+                throw new Exception("Variável   '" + token.getLexeme() + "'   não declarada!");   
         }
     }	
 }

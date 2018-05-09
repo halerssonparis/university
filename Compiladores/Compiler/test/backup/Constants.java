@@ -65,12 +65,13 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_TOKEN_59 = 59; //"->"
     int t_TOKEN_60 = 60; //"++"
     int t_TOKEN_61 = 61; //"--"
-    int t_TOKEN_62 = 62; //"'"
-    int t_end_line = 63;
-    int t_echo = 64;
-    int t_put = 65;
-    int t_comment_line = 66;
-    int t_comment_multi_lines = 67;
-    int t_w = 68;
+    int t_TOKEN_62 = 62; //"=="
+    int t_TOKEN_63 = 63; //"'"
+    int t_end_line = 64;
+    int t_echo = 65;
+    int t_put = 66;
+    int t_comment_line = 67;
+    int t_comment_multi_lines = 68;
+    int t_w = 69;
 
 }

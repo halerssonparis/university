@@ -32,7 +32,7 @@ public class SymbolTableUI extends JFrame{
         this.setTitle("Eleonora");
         
         
-        String[] names = {"Type", "id", "Init", "Used", "Scope", "Params", "Pos", "Vet", "Matriz", "Function"};
+        String[] names = {"Type", "id", "Init", "Used", "Scope", "Params", "Pos", "Vet", "Matriz", "Function", "FuncP"};
         //Object[][] data = {{"int", "a", "F", "T", "1", "F", "2", "T", "F", "T"}};
         
         System.out.println(symbolList.size());
@@ -51,7 +51,8 @@ public class SymbolTableUI extends JFrame{
                 String.valueOf(symbolList.get(i).params_position),
                 String.valueOf(symbolList.get(i).vector),
                 String.valueOf(symbolList.get(i).matriz),
-                String.valueOf(symbolList.get(i).function)
+                String.valueOf(symbolList.get(i).function),
+                String.valueOf(symbolList.get(i).funcP)
             };
             
             data[i] = newData;
