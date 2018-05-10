@@ -23,6 +23,7 @@ public class Semantico implements Constants
     
     String declarationAcu = "int";
     String funcP = "";
+    String vectorAcu = "";
     
     public void clearTable() {
         this.symbolTable = new ArrayList<>();
@@ -38,6 +39,8 @@ public class Semantico implements Constants
         this.signals = new Stack();
         
         declarationAcu = "int";
+        vectorAcu = "";
+        
         
         /*for (Symbol s : symbolTable) {
             System.out.println(s.type);
@@ -60,6 +63,7 @@ public class Semantico implements Constants
         int num2 = (int) expStack.pop();
 
         int result = SemanticTable.resultType(num1, num2, op);
+        
         switch(result) {
             case 0:
                 expStack.push(result);
@@ -75,7 +79,7 @@ public class Semantico implements Constants
                 return true;
             case 4: 
                 expStack.push(result);
-                break;
+                return true;
             case -1: 
                 return false;
         }
@@ -260,13 +264,19 @@ public class Semantico implements Constants
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas string");
                 }
-                expStack.push(3);
+                expStack.push(SemanticTable.STR);
                 break;
             case 55:
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas boolean");
                 }
-                expStack.push(4);
+                expStack.push(SemanticTable.BOO);
+                break;
+            case 56:
+                if (!signals.isEmpty()) {
+                    throw new Exception("Não pode negar umas boolean");
+                }
+                expStack.push(SemanticTable.CHA);
                 break;
              
             case 70:
@@ -288,16 +298,16 @@ public class Semantico implements Constants
                 
                 
             case 75:
-                expStack.push(0);
+                expStack.push(SemanticTable.SUM);
                 break;
             case 76:
-                expStack.push(1);
+                expStack.push(SemanticTable.SUB);
                 break;
             case 77:
-                expStack.push(2);
+                expStack.push(SemanticTable.MUL);
                 break;
             case 78: 
-                expStack.push(3);
+                expStack.push(SemanticTable.DIV);
                 break;
             case 79:
                 break;
@@ -324,13 +334,16 @@ public class Semantico implements Constants
                 break;
                 
             case 84:
-                expStack.push(4);
+                expStack.push(SemanticTable.REL);
+                break;
+                
+            case 99:
+                this.declarationAcu = "int";
                 break;
                 
             case 100:
                 switch (declarationAcu) {
                     case "int":
-                        declarationAcu = "int";
                         int expResult = SemanticTable.atribType(0, (int) expStack.pop());
                         if (expResult == 1) {
                             //Wanign
@@ -340,7 +353,6 @@ public class Semantico implements Constants
                         }
                         break;
                     case "float":
-                        declarationAcu = "int";
                         int expResultFloat = SemanticTable.atribType(1, (int) expStack.pop());
                         if (expResultFloat == 1) {
                             //Wanign
@@ -350,7 +362,6 @@ public class Semantico implements Constants
                         }
                         break;
                     case "char":
-                        declarationAcu = "int";
                         int expResultChar = SemanticTable.atribType(2, (int) expStack.pop());
                         if (expResultChar == 1) {
                             //Wanign
@@ -360,7 +371,7 @@ public class Semantico implements Constants
                         }
                         break;
                     case "string":
-                        declarationAcu = "int";
+                        System.out.println("cai aqui");
                         int expResultString = SemanticTable.atribType(3, (int) expStack.pop());
                         if (expResultString == 1) {
                             //Warnign
@@ -370,7 +381,6 @@ public class Semantico implements Constants
                         }
                         break;
                     case "boolean":
-                        declarationAcu = "int";
                         int expResultBool = SemanticTable.atribType(4, (int) expStack.pop());
                         if (expResultBool == 1) {
                             //Wanign
@@ -386,10 +396,29 @@ public class Semantico implements Constants
                 for (Symbol b : symbolTable) {
                     if (b.id.equals(token.getLexeme())) {
                         declarationAcu = b.type;
+                        this.vectorAcu = b.type;
+                        System.out.println(vectorAcu);
                         return;
                     }
                 }
                 throw new Exception("Variável   '" + token.getLexeme() + "'   não declarada!");   
+                
+            case 102:
+                System.out.println(this.vectorAcu);
+                declarationAcu = this.vectorAcu;
+                break;
+             
+            case 110:
+                declarationAcu = symbolTable.get(symbolTable.size() - 1).type;
+                break;
+                
+            case 120:
+                for (Symbol s : symbolTable) {
+                    if (s.id.equals(token.getLexeme())) {
+                        return;
+                    }
+                }
+                throw new Exception("Variável  '" + token.getLexeme() + "'   não foi declarada!");
         }
     }	
 }

@@ -73,5 +73,6 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_comment_line = 67;
     int t_comment_multi_lines = 68;
     int t_w = 69;
+    int t_l_char = 70;
 
 }

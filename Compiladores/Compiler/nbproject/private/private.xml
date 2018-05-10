@@ -6,9 +6,11 @@
             <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Semantico.java</file>
             <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/SymbolTableUI.java</file>
             <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Compiler.java</file>
+            <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Constants.java</file>
+            <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Sintatico.java</file>
+            <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/SemanticTable.java</file>
             <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Ide.java</file>
             <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Symbol.java</file>
-            <file>file:/C:/Users/haler/Desktop/Faculdade/halersson_paris/Compiladores/Compiler/src/compiler/Token.java</file>
         </group>
     </open-files>
 </project-private>

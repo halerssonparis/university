@@ -21,6 +21,7 @@ comment_multi_line: /\*[^\*]*\**([^/\*][^\*]*\*+)?/
 comment_single_line: (/)/.*
 hexa_decimal: [0-9A-F]x[0-9A-Fa-f]*
 words: \"[^\n\"]* (\\\")* \"
+char: '.'
 #Tokens
 numbers: {numbers}
 variable : {variable}
@@ -103,6 +104,7 @@ put = variable : "put"
 comment_line: {comment_single_line}
 comment_multi_lines: {comment_multi_line}
 w: {words}
+l_char: {char}
 #NonTerminals
 <INIT>
 <__FUNCTION__>
@@ -194,11 +196,11 @@ w: {words}
  
 
 //DECLARACAO DE VARIAVEL
-<VARIABLE_DECLARATION> ::= <TYPE> <VAR_LIST> | <TYPE> <VAR_LIST> <ASSIGN>;
+<VARIABLE_DECLARATION> ::= <TYPE> <VAR_LIST> | <TYPE> <VAR_LIST> #110 <ASSIGN>;
 <VAR_LIST> ::= <VAR_LIST> "," <ID_TYPES> | <ID_TYPES>; //| <ASSIGN> | <VAR_LIST><ASSING>;
-<ID_TYPES> ::= variable #6 | variable #7 "[" <exp> "]";
+<ID_TYPES> ::= variable #6 | variable #7 "[" <exp> #99 #100"]";
 
-<ID_TYPES2> ::=  variable #101 | variable #101 "[" <exp> #100 "]";
+<ID_TYPES2> ::=  variable #101 | variable #101 "[" <exp> #99 #100 "]" #102;
 
 
 //LACOS DE REPETICOES
@@ -209,7 +211,7 @@ w: {words}
 
 <LOOP_DEC_LIST> ::= <VARIABLE_DECLARATION> ";" <LOOP_DEC_LIST> | <LOOP_COND_LIST>;
 <LOOP_COND_LIST> ::= <exp> <LOOP_ATRIB_LIST> | <exp> ";" <LOOP_COND_LIST> ;
-<LOOP_ATRIB_LIST> ::= <LOOP_ATRIB_LIST> ";" <ID_TYPES> <LOOP_ATRIB_TYPE> | î ; // <VAR_LIST> <ASSIGN>;
+<LOOP_ATRIB_LIST> ::= <LOOP_ATRIB_LIST> ";" <ID_TYPES2> <LOOP_ATRIB_TYPE> | î ; // <VAR_LIST> <ASSIGN>;
 <LOOP_ATRIB_TYPE> ::= <ASSIGN> | "++" | "--";
 
 //IF
@@ -219,7 +221,7 @@ w: {words}
 
 //LEITURA E ESCRITA
 
-<DATA_ENTRY> ::=  put variable ";" | echo <V> <T> ";";
+<DATA_ENTRY> ::=  put variable #120 ";" | echo <V> <T> ";";
 <T> ::= <T> "+" <V> |î;
 <V> ::= <exp>;
 
@@ -234,7 +236,7 @@ w: {words}
 <exp7> ::= <exp7> <op_arit_baixa> <exp8> #80| <exp8>;
 <exp8> ::= <exp8> <op_arit_alta> <exp9> #81| <exp9> ;
 <exp9> ::= <op_neg> <exp10>  | <exp10>;
-<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | true #55 | false #55 | "(" <exp> ")" | variable #53 "(" <exp11> ")" | variable #53 "[" <exp> #100"]"; //"["<exp>"]" | 
+<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | l_char #56| true #55 | false #55 | "(" <exp> ")" | variable #53 "(" <exp11> ")" | variable #53 "[" <exp> #99 #100"]"; //"["<exp>"]" | 
 <exp11> ::= <exp12> | î;
 <exp12> ::= <exp12> "," <exp13> | <exp13>;
 <exp13> ::= <LAMBDA> | <exp>;
