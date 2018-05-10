@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -78,8 +80,12 @@ public class Ide extends JFrame{
         resultCodeArea.setText(value);
     }
     
-    public void displayWarning(String value) {
-        warningCodeArea.setText(value);
+    public void displayWarning(List<Symbol> warnings) {
+        String result = "";
+        for (Symbol w : warnings) {
+            result = result + w.type + " " + w.id + ":" + w.message + "\n";
+        }
+        warningCodeArea.setText(result);
     }
     
     public void displayError(String error) {
@@ -202,13 +208,12 @@ public class Ide extends JFrame{
         
         warningCodeArea.setEditable(false);
         warningCodeArea.setLineWrap(true);
-        warningCodeArea.setColumns(3);
-        warningCodeArea.setRows(3);
-        warningCodeArea.setSize(400, 500);
+        warningCodeArea.setColumns(5);
+        warningCodeArea.setRows(5);
         
         resultCodeArea.setEditable(false);
         resultCodeArea.setLineWrap(true);
-        resultCodeArea.setColumns(2);
+        resultCodeArea.setColumns(5);
         resultCodeArea.setRows(5);
         
         panelCodeArea.add(BorderLayout.CENTER, scrollCodeArea);

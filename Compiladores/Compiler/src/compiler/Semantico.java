@@ -28,6 +28,7 @@ public class Semantico implements Constants
     public void clearTable() {
         this.symbolTable = new ArrayList<>();
         this.actualSymbol = new Symbol();
+        this.symbolWarning = new ArrayList<>();
         
         this.params_position = 0;
         this.scope = 0;
@@ -298,6 +299,49 @@ public class Semantico implements Constants
                 }
                 expStack.push(SemanticTable.CHA);
                 break;
+            case 57:
+                for (Symbol b : symbolTable) {
+                    if (b.function && b.id.equals(token.getLexeme())) {
+                        switch (b.type) {
+                            case "int":
+                                if (!signals.isEmpty()) {
+                                    signals.pop();
+                                }
+                                expStack.push(0);
+                                b.used = true;
+                                return;
+                            case "float":
+                                if (!signals.isEmpty()) {
+                                    signals.pop();
+                                }
+                                expStack.push(1);
+                                b.used = true;
+                                return;
+                            case "char":
+                                if (!signals.isEmpty()) {
+                                    throw new Exception("Não pode negar umas char");
+                                }
+                                expStack.push(2);
+                                b.used = true;
+                                return;
+                            case "string":
+                                if (!signals.isEmpty()) {
+                                    throw new Exception("Não pode negar umas string");
+                                }
+                                expStack.push(3);
+                                return;
+                            case "boolean":
+                                if (!signals.lastElement().equals("!")) {
+                                    throw new Exception("Não pode negar uma boolean");
+                                }
+                                signals.pop();
+                                expStack.push(4);
+                                b.used = true;
+                                return;
+                        }
+                    }
+                }
+                break;
              
             case 70:
                 // Faz op
@@ -424,6 +468,8 @@ public class Semantico implements Constants
             case 101:
                 for (Symbol b : symbolTable) {
                     if (b.id.equals(token.getLexeme())) {
+                        b.initialized = true;
+                        
                         declarationAcu = b;
                         this.vectorAcu = b.type;
                         System.out.println(vectorAcu);
@@ -439,6 +485,7 @@ public class Semantico implements Constants
              
             case 110:
                 declarationAcu = symbolTable.get(symbolTable.size() - 1);
+                symbolTable.get(symbolTable.size() - 1).initialized = true;
                 break;
                 
             case 120:
@@ -449,11 +496,21 @@ public class Semantico implements Constants
                 }
                 throw new Exception("Variável  '" + token.getLexeme() + "'   não foi declarada!");
             
-            case 50135:
+            case 200:
                 for (Symbol b: symbolTable) {
-                    if (!(b.used || b.initialized)) {
-                        
+                    if (!b.used || !b.initialized) {
+                        if (!(b.used)) {
+                            b.message = b.message + " | Não usada";
+                        }
+                        if (!(b.initialized)) {
+                            b.message = b.message + " | Não inicializada";
+                        }
+                        symbolWarning.add(b);
                     }
+                }
+                
+                for (Symbol s : symbolWarning) {
+                    System.out.println(s.id + " = " + s.message);
                 }
                 break;
         }   

@@ -33,6 +33,7 @@ public class Compiler {
                      syntatic.parse(lexical, semantic);
                      
                      ide.displayValue("Sucesso ao compilar!");
+                     ide.displayWarning(semantic.symbolWarning);
                      
                  } catch (Exception ex) {
                      ide.displayError(ex.getMessage());

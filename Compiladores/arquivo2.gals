@@ -8,7 +8,7 @@ SemanticName = Semantico
 Package = compiler
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = String
+Input = Stream
 Parser = SLR
 #RegularDefinitions
 variable: [_a-zA-Z][a-zA-Z0-9_]*
@@ -172,7 +172,7 @@ l_char: {char}
 //TERMINO DO CODIGO DO P.
 #Grammar
 //PROGRAMA INICIA COM UMA FUNCAO 
-<INIT> ::= "{" <__FUNCTION__> "}";
+<INIT> ::= "{" <__FUNCTION__> "}" #200;
 <__FUNCTION__> ::= <__FUNCTION__> <TYPE> variable#2 "(" <PARAMS_TYPE> ")"#8 "{" <CMD_LIST> "}"#9 | î;
 
 <TYPE> ::= int #1 | float #1 | string #1 | char #1 | byte #1 | unsigned #1 | long #1 | bool #1 | void #1;
@@ -236,7 +236,7 @@ l_char: {char}
 <exp7> ::= <exp7> <op_arit_baixa> <exp8> #80| <exp8>;
 <exp8> ::= <exp8> <op_arit_alta> <exp9> #81| <exp9> ;
 <exp9> ::= <op_neg> <exp10>  | <exp10>;
-<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | l_char #56| true #55 | false #55 | "(" <exp> ")" | variable #53 "(" <exp11> ")" | variable #53 "[" <exp> #99 #100"]"; //"["<exp>"]" | 
+<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | l_char #56| true #55 | false #55 | "(" <exp> ")" | variable #57 "(" <exp11> ")" | variable #53 "[" <exp> #99 #100"]"; //"["<exp>"]" | 
 <exp11> ::= <exp12> | î;
 <exp12> ::= <exp12> "," <exp13> | <exp13>;
 <exp13> ::= <LAMBDA> | <exp>;
