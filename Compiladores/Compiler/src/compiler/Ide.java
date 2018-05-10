@@ -3,6 +3,7 @@ package compiler;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,7 +38,7 @@ public class Ide extends JFrame{
     private final JPanel panelTotal = new JPanel(new BorderLayout());
     
     private final JPanel panelCodeArea = new JPanel(new BorderLayout());
-    private final JPanel panelResultCodeArea = new JPanel(new BorderLayout());
+    private final JPanel panelResultCodeArea = new JPanel(new GridLayout());
     private final JPanel panelTopButtons = new JPanel(new FlowLayout());
     
     private final JMenuBar menuBar = new JMenuBar();
@@ -52,9 +53,11 @@ public class Ide extends JFrame{
     
     private final JTextArea codeArea = new JTextArea();
     private final JTextArea resultCodeArea = new JTextArea();
+    private final JTextArea warningCodeArea = new JTextArea();
     
     private final JScrollPane scrollCodeArea = new JScrollPane(codeArea);
     private final JScrollPane scrollResultCodeArea = new JScrollPane(resultCodeArea);
+    private final JScrollPane scrollWarningCodeArea = new JScrollPane(warningCodeArea);
     
     private final JButton buttonExecute = new JButton("Execute");
     private final JButton buttonCompile = new JButton("Compile");
@@ -73,6 +76,10 @@ public class Ide extends JFrame{
     
     public void displayValue(String value) {
         resultCodeArea.setText(value);
+    }
+    
+    public void displayWarning(String value) {
+        warningCodeArea.setText(value);
     }
     
     public void displayError(String error) {
@@ -193,13 +200,20 @@ public class Ide extends JFrame{
                         "\n" +
                         "}");
         
+        warningCodeArea.setEditable(false);
+        warningCodeArea.setLineWrap(true);
+        warningCodeArea.setColumns(3);
+        warningCodeArea.setRows(3);
+        warningCodeArea.setSize(400, 500);
+        
         resultCodeArea.setEditable(false);
         resultCodeArea.setLineWrap(true);
-        resultCodeArea.setColumns(5);
+        resultCodeArea.setColumns(2);
         resultCodeArea.setRows(5);
         
         panelCodeArea.add(BorderLayout.CENTER, scrollCodeArea);
-        panelResultCodeArea.add(BorderLayout.SOUTH, scrollResultCodeArea);
+        panelResultCodeArea.add(BorderLayout.CENTER, scrollResultCodeArea);
+        panelResultCodeArea.add(BorderLayout.CENTER, scrollWarningCodeArea);
         panelTopButtons.add(buttonExecute);
         panelTopButtons.add(buttonCompile);
         

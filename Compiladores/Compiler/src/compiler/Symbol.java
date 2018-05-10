@@ -19,6 +19,8 @@ public class Symbol {
     
     public String funcP;
     
+    public String message;
+    
     public Symbol() {
         this.type = "";
         this.id = "";
@@ -31,5 +33,7 @@ public class Symbol {
         this.matriz = false;
         this.function = false;
         this.funcP = "";
+        
+        this.message = "";
     }
 }
