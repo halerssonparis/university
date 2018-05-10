@@ -145,6 +145,7 @@ public class Semantico implements Constants
                 this.scope++;
                 this.actualScope.push(this.scope);
                 this.funcP = token.getLexeme();
+                actualSymbol.initialized = true;
                 actualSymbol.funcP = "Global";
                 
                 break;
@@ -161,6 +162,7 @@ public class Semantico implements Constants
                 actualSymbol.scope = (int) actualScope.lastElement();
                 actualSymbol.params = true;
                 actualSymbol.funcP = this.funcP;
+                actualSymbol.initialized = true;
                 break;
             case 6:
                 
@@ -246,6 +248,11 @@ public class Semantico implements Constants
                                 }
                                 expStack.push(0);
                                 b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
                                 return;
                             case "float":
                                 if (!signals.isEmpty()) {
@@ -253,6 +260,11 @@ public class Semantico implements Constants
                                 }
                                 expStack.push(1);
                                 b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
                                 return;
                             case "char":
                                 if (!signals.isEmpty()) {
@@ -260,12 +272,22 @@ public class Semantico implements Constants
                                 }
                                 expStack.push(2);
                                 b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
                                 return;
                             case "string":
                                 if (!signals.isEmpty()) {
                                     throw new Exception("Não pode negar umas string");
                                 }
                                 expStack.push(3);
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
                                 return;
                             case "boolean":
                                 if (!signals.lastElement().equals("!")) {
@@ -274,6 +296,11 @@ public class Semantico implements Constants
                                 signals.pop();
                                 expStack.push(4);
                                 b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
                                 return;
                         }
                     }
@@ -413,7 +440,7 @@ public class Semantico implements Constants
                         int expResult = SemanticTable.atribType(0, (int) expStack.pop());
                         
                         if (expResult == 1) {
-                            declarationAcu.message = "int -> " + value + " " + ":Warning";
+                            declarationAcu.message = " | int -> " + value + " " + ":Warning";
                             symbolWarning.add(declarationAcu);
                         }
                         else if (expResult == -1) {
@@ -424,7 +451,7 @@ public class Semantico implements Constants
                         
                         int expResultFloat = SemanticTable.atribType(1, (int) expStack.pop());
                         if (expResultFloat == 1) {
-                            declarationAcu.message = "float -> " + value + " " + ":Warning";
+                            declarationAcu.message = " | float -> " + value + " " + ":Warning";
                             symbolWarning.add(declarationAcu);
                         }
                         else if (expResultFloat == -1) {
@@ -434,7 +461,7 @@ public class Semantico implements Constants
                     case "char":
                         int expResultChar = SemanticTable.atribType(2, (int) expStack.pop());
                         if (expResultChar == 1) {
-                            declarationAcu.message = "char -> " + value + " " + ":Warning";
+                            declarationAcu.message = " | char -> " + value + " " + ":Warning";
                             symbolWarning.add(declarationAcu);
                         }
                         else if (expResultChar == -1) {
@@ -445,7 +472,7 @@ public class Semantico implements Constants
                         
                         int expResultString = SemanticTable.atribType(3, (int) expStack.pop());
                         if (expResultString == 1) {
-                            declarationAcu.message = "string -> " + value + " " + ":Warning";
+                            declarationAcu.message = " | string -> " + value + " " + ":Warning";
                             symbolWarning.add(declarationAcu);
                         }
                         else if (expResultString == -1) {
@@ -455,7 +482,7 @@ public class Semantico implements Constants
                     case "boolean":
                         int expResultBool = SemanticTable.atribType(4, (int) expStack.pop());
                         if (expResultBool == 1) {
-                            declarationAcu.message = "boolean -> " + value + " " + ":Warning";
+                            declarationAcu.message = " | boolean -> " + value + " " + ":Warning";
                             symbolWarning.add(declarationAcu);
                         }
                         else if (expResultBool == -1) {
@@ -507,10 +534,6 @@ public class Semantico implements Constants
                         }
                         symbolWarning.add(b);
                     }
-                }
-                
-                for (Symbol s : symbolWarning) {
-                    System.out.println(s.id + " = " + s.message);
                 }
                 break;
         }   

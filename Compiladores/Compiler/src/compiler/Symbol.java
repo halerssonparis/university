@@ -20,6 +20,7 @@ public class Symbol {
     public String funcP;
     
     public String message;
+    public int warning;
     
     public Symbol() {
         this.type = "";
@@ -33,6 +34,7 @@ public class Symbol {
         this.matriz = false;
         this.function = false;
         this.funcP = "";
+        this.warning = 0;
         
         this.message = "";
     }
