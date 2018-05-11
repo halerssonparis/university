@@ -10,6 +10,8 @@ public class Semantico implements Constants
     public List<Symbol> symbolWarning = new ArrayList<>();
     private List<Symbol> symbolTable =  new ArrayList<>();
     
+    Symbol returnFunction = new Symbol();
+    
     private Stack actualScope = new Stack();
     private Stack expStack = new Stack();
     private Stack operation = new Stack();
@@ -43,20 +45,8 @@ public class Semantico implements Constants
         declarationAcu = new Symbol();
         vectorAcu = "";
         
-        
-        /*for (Symbol s : symbolTable) {
-            System.out.println(s.type);
-            System.out.println(s.id);
-            System.out.println(s.initialized);
-            System.out.println(s.used);
-            System.out.println(s.params);
-            System.out.println(s.params_position);
-            System.out.println(s.vector);
-            System.out.println(s.scope);
-            System.out.println(s.matriz);
-            System.out.println(s.function);
-            
-        }*/
+        returnFunction = new Symbol();
+    
     }
     
     private String returnName(int id) {
@@ -148,6 +138,8 @@ public class Semantico implements Constants
                 this.funcP = token.getLexeme();
                 actualSymbol.initialized = true;
                 actualSymbol.funcP = "Global";
+                
+                returnFunction = actualSymbol;
                 
                 break;
             case 3:
@@ -565,6 +557,52 @@ public class Semantico implements Constants
                             break;
                         case -1:
                             throw new Exception("Função  '" + actualFunction.id + "'  não definida!");
+                    }
+                }
+                
+                break;
+                
+            case 160:
+                
+                for (Symbol b: symbolTable) {
+                    if (b.id.equals(returnFunction.id) && b.function) {
+                        switch(b.type) {
+                            case "int":
+                                switch(semanticTable.atribType(semanticTable.INT, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                            case "float":
+                                switch(semanticTable.atribType(semanticTable.FLO, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                            case "char":
+                                
+                                switch(semanticTable.atribType(semanticTable.CHA, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                             
+                            case "string":
+                                switch(semanticTable.atribType(semanticTable.STR, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                            case "boolean":
+                                switch(semanticTable.atribType(semanticTable.BOO, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                        }
                     }
                 }
                 
