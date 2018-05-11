@@ -8,14 +8,15 @@ public class Semantico implements Constants
 {
     private SemanticTable semanticTable = new SemanticTable();
     public List<Symbol> symbolWarning = new ArrayList<>();
-    
     private List<Symbol> symbolTable =  new ArrayList<>();
     
     private Stack actualScope = new Stack();
     private Stack expStack = new Stack();
     private Stack operation = new Stack();
     private Stack signals = new Stack();
-    
+    private Stack paramsExp = new Stack();
+    private Stack paramsNameFunction = new Stack();
+            
     private int scope = 0;
     private int params_position = 0;
     
@@ -329,6 +330,7 @@ public class Semantico implements Constants
             case 57:
                 for (Symbol b : symbolTable) {
                     if (b.function && b.id.equals(token.getLexeme())) {
+                        paramsNameFunction.push(b);
                         switch (b.type) {
                             case "int":
                                 if (!signals.isEmpty()) {
@@ -368,7 +370,7 @@ public class Semantico implements Constants
                         }
                     }
                 }
-                break;
+                throw new Exception("Função   '" + token.getLexeme() + "'   não declarada!");
              
             case 70:
                 // Faz op
@@ -523,6 +525,51 @@ public class Semantico implements Constants
                 }
                 throw new Exception("Variável  '" + token.getLexeme() + "'   não foi declarada!");
             
+            case 150:
+                paramsExp.push((int) expStack.pop());
+                break;
+                
+            case 151:
+                Symbol actualFunction = (Symbol) paramsNameFunction.pop();
+                Stack expActulFunction = new Stack();
+                
+                for (Symbol s : symbolTable) {
+                    if (s.params && s.funcP.equals(actualFunction.id)) {
+                        switch (s.type) {
+                            case "int":
+                                expActulFunction.push(0);
+                                break;
+                            case "float":
+                                expActulFunction.push(1);
+                                break;
+                            case "char":
+                                expActulFunction.push(2);
+                                break;
+                            case "string":
+                                expActulFunction.push(3);
+                                break;
+                            case "boolean":
+                                expActulFunction.push(4);
+                                break;
+                        }
+                    }
+                }
+                
+                while(!expActulFunction.empty()) {
+                    if (expActulFunction.empty() || paramsExp.empty()) {
+                        throw new Exception("Função  '" + actualFunction.id + "'  não definida!");
+                    }
+                    switch (SemanticTable.atribType((int) paramsExp.pop(), (int) expActulFunction.pop())) {
+                        case 1:
+                            //bitch
+                            break;
+                        case -1:
+                            throw new Exception("Função  '" + actualFunction.id + "'  não definida!");
+                    }
+                }
+                
+                break;
+                
             case 200:
                 for (Symbol b: symbolTable) {
                     if (!b.used || !b.initialized) {

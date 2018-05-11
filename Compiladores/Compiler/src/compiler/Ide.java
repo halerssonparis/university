@@ -83,7 +83,7 @@ public class Ide extends JFrame{
     public void displayWarning(List<Symbol> warnings) {
         String result = "";
         for (Symbol w : warnings) {
-            result = result + w.type + " " + w.id + ":" + w.message + " => " + w.funcP + "\n";
+            result = result + w.type + " " + w.id + "   ::=   " + w.message + " => " + w.funcP + "\n";
         }
         warningCodeArea.setText(result);
     }
