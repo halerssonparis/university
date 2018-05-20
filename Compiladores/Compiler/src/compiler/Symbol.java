@@ -17,16 +17,10 @@ public class Symbol {
     //public boolean reference;
     public boolean function;
     
-    Map<String, String> variaveis = new HashMap<String, String>();
-
-    void a () {
-        String id = "a";
-        String valor= "123";
-        String b = variaveis.get("a");
-        if ( new Symbol().type instanceof String){
-         
-        }
-    }
+    public String funcP;
+    
+    public String message;
+    public int warning;
     
     public Symbol() {
         this.type = "";
@@ -39,5 +33,9 @@ public class Symbol {
         this.vector = false;
         this.matriz = false;
         this.function = false;
+        this.funcP = "";
+        this.warning = 0;
+        
+        this.message = "";
     }
 }

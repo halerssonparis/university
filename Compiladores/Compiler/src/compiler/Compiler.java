@@ -19,21 +19,29 @@ public class Compiler {
         }
         
         semantic = new Semantico();
+       
         
         java.awt.EventQueue.invokeLater(() -> {
              ide = new Ide();
              
              ide.onExecute((program) -> {
                  Lexico lexical = new Lexico(program);
+                 
                  //ide.displayValue(program);
                  try {
+                     semantic.clearTable();
                      syntatic.parse(lexical, semantic);
                      
-                     ide.displayValue("it's work!");
+                     ide.displayValue("Sucesso ao compilar!");
+                     ide.displayWarning(semantic.symbolWarning);
                      
-                 } catch (LexicalError | SyntaticError | SemanticError ex) {
+                 } catch (Exception ex) {
                      ide.displayError(ex.getMessage());
-                 }
+                 } 
+             });
+             
+             ide.onOpenTable( b -> {
+                 SymbolTableUI tableSymbolUI = new SymbolTableUI(semantic.getList());
              });
              //});
              ide.setVisible(true);
