@@ -187,7 +187,7 @@ l_char: {char}
 
 //CORPO DA FUNCAO
 <CMD_LIST> ::=  <VARIABLE_DECLARATION>#10 ";" <CMD_LIST> | #15<REPEAT_LOOP> <CMD_LIST> |  #15<IF> <CMD_LIST> | <CMD_LIST2>;
-<CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <V> ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
+<CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <exp> #160 ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
 <CMD_LIST3> ::= <ID_TYPES2> <ASSIGN>";" <CMD_LIST> | variable"(" <exp11> #151")" ";" <CMD_LIST> | î;
 
 <COMMENTS> ::= comment_multi_lines | comment_line;

@@ -12,7 +12,9 @@ public class Semantico implements Constants
     
     public List<AssemblyStruct> assemblyData = new ArrayList<>();
     public List<AssemblyStruct> assemblyText = new ArrayList<>();
-    
+
+    Symbol returnFunction = new Symbol();
+
     private Stack actualScope = new Stack();
     private Stack expStack = new Stack();
     private Stack operation = new Stack();
@@ -53,6 +55,7 @@ public class Semantico implements Constants
         
         declarationAcu = new Symbol();
         vectorAcu = "";
+        
         assembly = new AssemblyStruct();
         isArithmetic = "";
         
@@ -69,6 +72,8 @@ public class Semantico implements Constants
             System.out.println(s.function);
             
         }*/
+        returnFunction = new Symbol();
+   
     }
     
     private String returnName(int id) {
@@ -183,6 +188,8 @@ public class Semantico implements Constants
                 
                 AssemblyStruct newFunctionAssembly = new AssemblyStruct("_"+token.getLexeme()+":", "");
                 assemblyText.add(newFunctionAssembly);
+                returnFunction = actualSymbol;
+                
                 break;
             case 3:
                 addSymboltoList();
@@ -620,6 +627,52 @@ public class Semantico implements Constants
                             break;
                         case -1:
                             throw new Exception("Função  '" + actualFunction.id + "'  não definida!");
+                    }
+                }
+                
+                break;
+                
+            case 160:
+                
+                for (Symbol b: symbolTable) {
+                    if (b.id.equals(returnFunction.id) && b.function) {
+                        switch(b.type) {
+                            case "int":
+                                switch(semanticTable.atribType(semanticTable.INT, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                            case "float":
+                                switch(semanticTable.atribType(semanticTable.FLO, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                            case "char":
+                                
+                                switch(semanticTable.atribType(semanticTable.CHA, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                             
+                            case "string":
+                                switch(semanticTable.atribType(semanticTable.STR, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                            case "boolean":
+                                switch(semanticTable.atribType(semanticTable.BOO, (int) expStack.pop())) {
+                                    case -1:
+                                        throw new Exception("return é diferente do tipo da função '" + b.id + "'");
+                                }
+                                return;
+                                
+                        }
                     }
                 }
                 
