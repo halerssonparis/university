@@ -43,6 +43,10 @@ public class Compiler {
              ide.onOpenTable( b -> {
                  SymbolTableUI tableSymbolUI = new SymbolTableUI(semantic.getList());
              });
+             
+             ide.onOpenAssemblyCode( b -> {
+                AssemblyCodeUI assemblyCodeUI = new AssemblyCodeUI(semantic.assemblyData, semantic.assemblyText);
+             });
              //});
              ide.setVisible(true);
          });   

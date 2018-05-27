@@ -52,6 +52,7 @@ public class Ide extends JFrame{
     private final JMenuItem item3 = new JMenuItem("About");
     
     private final JMenuItem itemTable = new JMenuItem("Symbol Table");
+    private final JMenuItem itemTable2 = new JMenuItem("Assembly Code");
     
     private final JTextArea codeArea = new JTextArea();
     private final JTextArea resultCodeArea = new JTextArea();
@@ -72,6 +73,12 @@ public class Ide extends JFrame{
     
     public void onOpenTable(Consumer<Boolean> b) {
         itemTable.addActionListener((ActionEvent ev) -> {
+            b.accept(true);
+        });
+    }
+    
+    public void onOpenAssemblyCode(Consumer<Boolean> b) {
+        itemTable2.addActionListener((ActionEvent ev) -> {
             b.accept(true);
         });
     }
@@ -192,6 +199,7 @@ public class Ide extends JFrame{
         menu.add(item2);
         menu.add(item3);
         menuTable.add(itemTable);
+        menuTable.add(itemTable2);
         panelMenuBar.add(menuBar);
         
         codeArea.setLineWrap(false);
