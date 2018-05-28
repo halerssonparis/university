@@ -1,6 +1,6 @@
 import numpy as np
 import csv 
-
+import copy
 
 class NeuralNetwork:
 
@@ -70,10 +70,12 @@ class Database:
     APP_PACKETS = []
     DNS_QUERY_TIMES = []
     
+    newList = []
     modified_row = []
 
     def getData(self):
         with open('dataset.csv') as dataset:
+            #id = 0
             self.data = csv.reader(dataset, delimiter=',')
 
             err = 0
@@ -95,11 +97,20 @@ class Database:
  
 
                 for item in self.SERVER:
-                    if (item.lower() == row[4].lower()):
+                    newList = copy.deepcopy(row)
+                    var = newList[4].lower()
+                    var = var[0:6]
+                    #print "{} ------ {}".format(var, row[4])
+                    if (item.lower() == row[4].lower() or var != "apache"):
                         err = 1
                 if (err == 0):
                     self.SERVER.append(row[4].lower())
+                    
+                    #print "{}  -  {}".format(id, self.SERVER[id])
+                    #id = id + 1
                 err = 0 
+                
+                
 
 
                 for item in self.WHOIS_COUNTRY:
@@ -126,60 +137,78 @@ class Database:
         
         with open('dataset.csv') as dataset:
             self.data = csv.reader(dataset, delimiter=',')
+            haveApache = False
 
             for row in self.data:
-                for index in range(len(row)):
+                haveApache = False
+                for item in self.SERVER:
+                    #print "{} -- {}".format(item, row[4])
+                    if (item.lower() == row[4].lower()):
+                        haveApache = True
+                        #print "{} -- {}".format(item, row[4])
+
+                if (haveApache):
+                    for index in range(len(row)):
+                     
                     #print(index)
-                    if (index == 0):
-                        for id in range(len(self.URL)):
-                            if (self.URL[id] == row[index].lower()):
-                                self.modified_row.append(id)
+                        if (index == 0):
+                            for id in range(len(self.URL)):
+                                if (self.URL[id] == row[index].lower()):
+                                    self.modified_row.append(id)
 
-                    elif (index == 3):
-                        for id in range(len(self.CHARSET)):
-                            if (self.CHARSET[id] == row[index].lower()):
-                                self.modified_row.append(id)
+                        elif (index == 3):
+                            for id in range(len(self.CHARSET)):
+                                if (self.CHARSET[id] == row[index].lower()):
+                                    self.modified_row.append(id)
 
-                    elif (index == 4):
-                        for id in range(len(self.SERVER)):
-                            if (self.SERVER[id] == row[index].lower()):
-                                self.modified_row.append(id)
+                        elif (index == 4):
+                            err2 = 0
+                            for id in range(len(self.SERVER)):
+                                if (self.SERVER[id] == row[index].lower()):
+                                    self.modified_row.append(id)
 
-                    elif (index == 5):
-                        if (row[index] == "NA"):
-                            self.modified_row.append(0)
+                        elif (index == 5):
+                            if (row[index] == "NA"):
+                                self.modified_row.append(0)
+                            else:
+                                self.modified_row.append(row[index].lower())
 
-                    elif (index == 6):
-                        for id in range(len(self.WHOIS_COUNTRY)):
-                            if (self.WHOIS_COUNTRY[id] == row[index].lower()):
-                                self.modified_row.append(id)
+                        elif (index == 6):
+                            for id in range(len(self.WHOIS_COUNTRY)):
+                                if (self.WHOIS_COUNTRY[id] == row[index].lower()):
+                                    self.modified_row.append(id)
 
-                    elif (index == 7):
-                        for id in range(len(self.WHOIS_STATEPRO)):
-                            if (self.WHOIS_STATEPRO[id] == row[index].lower()):
-                                self.modified_row.append(id)
+                        elif (index == 7):
+                            for id in range(len(self.WHOIS_STATEPRO)):
+                                if (self.WHOIS_STATEPRO[id] == row[index].lower()):
+                                    self.modified_row.append(id)
 
-                    else:
-                        self.modified_row.append(row[index].lower())
+                        else:
+                            self.modified_row.append(row[index].lower())
 
 
-                if (self.modified_row[17] == "0" or self.modified_row[17] == "1"):
-                    print "myNetwork.activate([",
-                    for value in range(len(self.modified_row)):
-                        if (value != 17):
-                            print "{},".format(self.modified_row[value]),
-        
-                    print "]);"
-                    print "myNetwork.propagate(learningRate, [{}]);".format(self.modified_row[17])
-                del self.modified_row[:]
-    
+                    if (self.modified_row[18] == "0" or self.modified_row[18] == "1"):
+                        #print "myNetwork.activate([",
+                        print "[",
+                        for value in range(len(self.modified_row)):
+                            if (value != 0):    
+                                if (value != 18):
+                                    print "{},".format(self.modified_row[value]),
+                                else:
+                                    print "{}".format(self.modified_row[value]),
+            
+                        print "],"
+                        #print "]);"
+                        #print "myNetwork.propagate(learningRate, [{}]);".format(self.modified_row[17])
+                    del self.modified_row[:]
+                         
 
     def types(self):
-        print(self.URL)
-        print(self.CHARSET)
+        #print(self.URL)
+        #print(self.CHARSET)
         print(self.SERVER)
-        print(self.WHOIS_COUNTRY)
-        print(self.WHOIS_STATEPRO)
+        #print(self.WHOIS_COUNTRY)
+        #print(self.WHOIS_STATEPRO)
 
 
     def randomData(self):
@@ -194,6 +223,7 @@ db.getData()
 db.printer()
 #db.types()
 #db.randomData()
+
 
 #v = [0,5,2,5,5]
 #print(range(len(v)))
