@@ -32,7 +32,7 @@ var Neuron = synaptic.Neuron,
 	Architect = synaptic.Architect;
 
 var inputLayer = new Layer(17);
-var hiddenLayer = new Layer(50);
+var hiddenLayer = new Layer(300);
 var outputLayer = new Layer(1);
 
 inputLayer.project(hiddenLayer);
@@ -45,7 +45,7 @@ var myNetwork = new Network({
 });
 
 var learningRate = .3;
-for (var i = 0; i < 7000; i++)
+for (var i = 0; i < 5000; i++)
 {
     for (var j = 0; j < cases.data.length; j++) {
 
@@ -55,6 +55,8 @@ for (var i = 0; i < 7000; i++)
     }   
     cases.data = shuffle(cases.data)
 }
+
+console.log("terminou!")
 
 /*
 
@@ -77,6 +79,8 @@ rl.question('What do you think of Node.js? ', (answer) => {
   rl.close();
 });*/
 
+
+/*
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 var util = require('util');
@@ -95,7 +99,55 @@ process.stdin.on('data', function (text) {
 function done() {
     console.log('Now that process.stdin is paused, there is nothing more to do.');
     process.exit();
-}
+}*/
+
+results = []
+_CORRET = 1;
+_INCORRET = 0;
+_THINKING = 0.5;
+erro1 = 0;
+acerto1 = 0;
+
+erro0 = 0;
+acerto0 = 0;
+
+for (var j = 0; j < cases.data.length; j++) {
+
+    var resultActual = myNetwork.activate([cases.data[j][0], cases.data[j][1], cases.data[j][2], cases.data[j][3], cases.data[j][4], cases.data[j][5], cases.data[j][6], cases.data[j][7], cases.data[j][8], cases.data[j][9], cases.data[j][10], cases.data[j][11], cases.data[j][12], cases.data[j][13], cases.data[j][13], cases.data[j][15], cases.data[j][16]]);
+
+    if (resultActual <= 0.15 ) {
+        if (cases.data[j][17] == 0 ) {
+            results.push(_CORRET);
+            console.log("Esperado: ",cases.data[j][17],"    ", _CORRET,"       Saida: ",resultActual);
+            acerto0 = acerto0 + 1;
+        }
+        else {
+            results.push(_INCORRET);
+            console.log("Esperado: ",cases.data[j][17],"    ", _INCORRET,"     Saida: ",resultActual);
+            erro0 = erro0 + 1;        
+        }
+    }
+    else if (resultActual > 0.15 && resultActual < 0.75 ) {
+        results.push(_THINKING);
+        console.log("Esperado: ",cases.data[j][17],"    ", _THINKING,"     Saida: ",resultActual);
+    }
+    else if (resultActual >= 0.75 ) {
+        if (cases.data[j][17] == 1 ) {
+            results.push(_CORRET);
+            console.log("Esperado: ",cases.data[j][17],"    ", _CORRET,"       Saida: ",resultActual);
+            acerto1 = acerto1 + 1;
+        }
+        else {
+            results.push(_INCORRET);
+            console.log("Esperado: ",cases.data[j][17],"    ", _INCORRET,"     Saida: ",resultActual);
+            erro1 = erro1 + 1;        
+        }
+    }
+
+    
+} 
+
+console.log("acerto 1: ", acerto1, " erro 1: ", erro1, "\nacerto 0: ", acerto0, "  erro 0: ", erro0);
 
 
 //console.log(myNetwork.activate([ 35, 8, 1, 16, 0, 6, 70, 15, 1, 2, 1850, 21, 23, 2970, 2302, 21, 6]))
@@ -104,6 +156,14 @@ function done() {
 //console.log(myNetwork.activate([ 178, 16, 2, 7, 0, 30, 154, 0, 0, 0, 0, 0, 3, 186, 0, 0, 0]))
 //console.log(myNetwork.activate([ 194, 17, 2, 7, 0, 30, 154, 0, 0, 0, 0, 0, 3, 186, 0, 0, 0]))
 /*
+
+
+#NEW
+[ 161, 23, 1, 47, 417, 1, 1, 7, 7, 2, 582, 7, 11, 752, 582, 7, 0, 0 ],
+    [ 170, 17, 2, 3, 0, 30, 154, 0, 0, 0, 0, 0, 2, 124, 0, 0, 0, 1 ],
+
+
+##OLD
 [ 49, 12, 2, 13, 4877, 2, 119, 8, 0, 2, 811, 10, 11, 6062, 961, 10, 2, 1 ],
 [ 49, 13, 2, 7, 0, 23, 80, 50, 0, 2, 3571, 52, 55, 66449, 3723, 52, 2, 1 ],
 [ 56, 11, 1, 6, 0, 39, 130, 7, 0, 2, 752, 9, 9, 1197, 916, 9, 2, 1 ], // ta treinado
