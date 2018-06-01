@@ -48,10 +48,10 @@ public class AssemblyCodeUI extends JFrame{
         String text = ".text\n";
         
         for (AssemblyStruct e : d) {
-            data = data + e.id+":"+e.command+"\n";
+            data = data + "    " + e.id+":"+e.command+"\n";
         }
         for (AssemblyStruct e : t) {
-            text = text + e.command+" "+e.id+"\n";
+            text = text + "    "+ e.command+" "+e.id+"\n";
         }
         codeArea.setText(data + text);
         

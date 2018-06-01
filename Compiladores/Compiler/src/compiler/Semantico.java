@@ -12,9 +12,15 @@ public class Semantico implements Constants
     
     public List<AssemblyStruct> assemblyData = new ArrayList<>();
     public List<AssemblyStruct> assemblyText = new ArrayList<>();
-
+    
     Symbol returnFunction = new Symbol();
 
+    
+    private Stack vectorPusher = new Stack();
+    private List<String> arithmeticVector = new ArrayList<>();
+    
+    private List<List> expController = new ArrayList<>();
+    
     private Stack actualScope = new Stack();
     private Stack expStack = new Stack();
     private Stack operation = new Stack();
@@ -22,19 +28,24 @@ public class Semantico implements Constants
     private Stack paramsExp = new Stack();
     private Stack paramsNameFunction = new Stack();
             
+    private Stack tempStack = new Stack();
     private int scope = 0;
     private int params_position = 0;
     
     Symbol actualSymbol = new Symbol();
     AssemblyStruct actualAssembly = new AssemblyStruct();
-    //assembly var é um substituto
-    AssemblyStruct assembly;
     
     Symbol declarationAcu = new Symbol();
     String funcP = "";
     String vectorAcu = "";
     
     String isArithmetic;
+    boolean isVector = false;
+    boolean receiveSomething = false;
+    private int countTemp = 0;
+    private boolean isExp = false;
+    
+    private String indexVectorReceive = "";
     
     public void clearTable() {
         this.symbolTable = new ArrayList<>();
@@ -52,13 +63,22 @@ public class Semantico implements Constants
         this.expStack = new Stack();
         this.operation = new Stack();
         this.signals = new Stack();
-        
+        this.vectorPusher = new Stack();
         declarationAcu = new Symbol();
         vectorAcu = "";
-        
-        assembly = new AssemblyStruct();
         isArithmetic = "";
+        arithmeticVector = new ArrayList<>();
         
+        expController = new ArrayList<>();
+        List n = new ArrayList<>();
+        expController.add(n);
+        
+        isVector = false;
+        countTemp = 0;
+        isExp = false;
+        tempStack = new Stack();
+        
+        indexVectorReceive = "";
         /*for (Symbol s : symbolTable) {
             System.out.println(s.type);
             System.out.println(s.id);
@@ -139,16 +159,17 @@ public class Semantico implements Constants
         String instructionSUB = code == 0 ? "SUBI" : "SUB";
         String instructionADD = code == 0 ? "ADDI" : "ADD";
         
+        //System.out.println(arithmeticVector.pop().equals("2"));
         if (isArithmetic.equals("")) {
             AssemblyStruct assembly = new AssemblyStruct(instruction, lexeme);
             assemblyText.add(assembly);
         } else {
             if (isArithmetic.equals("+")) {
-                AssemblyStruct assembly = new AssemblyStruct(instructionADD, lexeme);
-                assemblyText.add(assembly);   
+                AssemblyStruct newAssembly = new AssemblyStruct(instructionADD, lexeme);
+                assemblyText.add(newAssembly);   
             } else if (isArithmetic.equals("-")) {    
-                AssemblyStruct assembly = new AssemblyStruct(instructionSUB, lexeme);
-                assemblyText.add(assembly);   
+                AssemblyStruct newAssembly = new AssemblyStruct(instructionSUB, lexeme);
+                assemblyText.add(newAssembly);   
             }
         }
     }
@@ -240,6 +261,12 @@ public class Semantico implements Constants
                 actualSymbol.scope = (int) actualScope.lastElement();
                 actualSymbol.funcP = this.funcP;
                 addSymboltoList();
+                
+                //System.out.println(token.getLexeme());
+                actualAssembly.id = token.getLexeme();
+                actualAssembly.command = "0";
+                isVector = true;
+                
                 break;
             case 8:
                 params_position = 0;
@@ -250,12 +277,69 @@ public class Semantico implements Constants
               
             //10 - 10 se pah |  declaração de variaveis 
             case 10:
-                assemblyData.add(actualAssembly);
-                assembly = new AssemblyStruct("STO", actualAssembly.id);
-                assemblyText.add(assembly);
-                actualSymbol.scope = (int) actualScope.lastElement();
+                if (isVector) {
+                    assemblyData.add(actualAssembly);
+                    
+                    AssemblyStruct assembly;
+                    if (receiveSomething) {
+                        assembly = new AssemblyStruct("STO", "temp"+countTemp);
+                        assemblyText.add(assembly);
+                    }
+                    assembly = new AssemblyStruct("LD", indexVectorReceive);
+                    assemblyText.add(assembly);
+
+                    assembly = new AssemblyStruct("STO", "$indr");
+                    assemblyText.add(assembly);
+                    
+                    if (receiveSomething) {
+                        assembly = new AssemblyStruct("LD", "temp"+countTemp);
+                        assemblyText.add(assembly);
+                    }
+                    
+                    assembly = new AssemblyStruct("STOV", actualAssembly.id);
+                    assemblyText.add(assembly);
+
+                    receiveSomething = false;
+                    indexVectorReceive = "";
+                    actualSymbol.scope = (int) actualScope.lastElement();
+                    isVector = false;
+                    isExp = false;
+                }
+                else {
+                    assemblyData.add(actualAssembly);
+                    AssemblyStruct assembly = new AssemblyStruct("STO", actualAssembly.id);
+                    assemblyText.add(assembly);
+                    actualSymbol.scope = (int) actualScope.lastElement();
+                }
+                countTemp = 0;
                 break; 
-               
+                
+            case 11:
+                if (isVector) {
+                    AssemblyStruct assembly = new AssemblyStruct("STO", "temp"+countTemp);
+                    assemblyText.add(assembly);
+                    
+                    assembly = new AssemblyStruct("LD", indexVectorReceive);
+                    assemblyText.add(assembly);
+                    
+                    assembly = new AssemblyStruct("STO", "$indr");
+                    assemblyText.add(assembly);
+                    
+                    assembly = new AssemblyStruct("LD", "temp"+countTemp);
+                    assemblyText.add(assembly);
+                    
+                    assembly = new AssemblyStruct("STOV", actualAssembly.id);
+                    assemblyText.add(assembly);
+                    
+                    indexVectorReceive = "";
+                    isVector = false;
+                    isExp = false;
+                }
+                else {
+                    AssemblyStruct assembly = new AssemblyStruct("STO", actualAssembly.id);
+                    assemblyText.add(assembly);
+                }
+                countTemp = 0;
             //LOOP'S 15-?
             case 15:
                 flush();
@@ -291,8 +375,10 @@ public class Semantico implements Constants
                 // binario
                 break;
             case 53:
+              
                 for (Symbol b : symbolTable) {
                     if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement() && b.funcP.equals(this.funcP)) {
+                        
                         switch (b.type) {
                             case "int":
                                 if (!signals.isEmpty()) {
@@ -331,7 +417,7 @@ public class Semantico implements Constants
                                     b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
                                     b.warning = 1;
                                 }
-                                generateAssembly(token.getLexeme(), 1);
+                                //generateAssembly(token.getLexeme(), 1);
                                 return;
                             case "string":
                                 if (!signals.isEmpty()) {
@@ -343,7 +429,7 @@ public class Semantico implements Constants
                                     b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
                                     b.warning = 1;
                                 }
-                                generateAssembly(token.getLexeme(), 1);
+                                //generateAssembly(token.getLexeme(), 1);
                                 return;
                             case "boolean":
                                 if (!signals.lastElement().equals("!")) {
@@ -357,7 +443,7 @@ public class Semantico implements Constants
                                     b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
                                     b.warning = 1;
                                 }
-                                generateAssembly(token.getLexeme(), 1);
+                                //generateAssembly(token.getLexeme(), 1);
                                 return;
                         }
                     }
@@ -369,12 +455,15 @@ public class Semantico implements Constants
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas string");
                 }
+                
+                generateAssembly(token.getLexeme(), 0);
                 expStack.push(SemanticTable.STR);
                 break;
             case 55:
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas boolean");
                 }
+                
                 expStack.push(SemanticTable.BOO);
                 break;
             case 56:
@@ -428,6 +517,97 @@ public class Semantico implements Constants
                 }
                 throw new Exception("Função   '" + token.getLexeme() + "'   não declarada!");
              
+                
+            case 60:
+                
+                 for (Symbol b : symbolTable) {
+                    if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement() && b.funcP.equals(this.funcP)) {
+                        
+                        if (isArithmetic.equals("+") || isArithmetic.equals("-")) {
+                            AssemblyStruct assembly = new AssemblyStruct("STO", "temp"+countTemp);
+                            tempStack.push("temp"+countTemp);
+                            assemblyText.add(assembly);
+                            countTemp++;
+                        }
+                        List newList = new ArrayList<>();
+                        expController.add(newList);
+                        
+                        vectorPusher.push(b.id);
+                        this.arithmeticVector.add(isArithmetic);
+                        isArithmetic = "";
+                        isExp = true;
+                        
+                        switch (b.type) {
+                            case "int":
+                                if (!signals.isEmpty()) {
+                                    signals.pop();
+                                }
+                                expStack.push(0);
+                                b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
+                               //generateAssembly(token.getLexeme(), 1);
+                                return;
+                            case "float":
+                                if (!signals.isEmpty()) {
+                                    signals.pop();
+                                }
+                                expStack.push(1);
+                                b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
+                                //generateAssembly(token.getLexeme(), 1);
+                                return;
+                            case "char":
+                                if (!signals.isEmpty()) {
+                                    throw new Exception("Não pode negar umas char");
+                                }
+                                expStack.push(2);
+                                b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
+                               // generateAssembly(token.getLexeme(), 1);
+                                return;
+                            case "string":
+                                if (!signals.isEmpty()) {
+                                    throw new Exception("Não pode negar umas string");
+                                }
+                                expStack.push(3);
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
+                                //generateAssembly(token.getLexeme(), 1);
+                                return;
+                            case "boolean":
+                                if (!signals.lastElement().equals("!")) {
+                                    throw new Exception("Não pode negar uma boolean");
+                                }
+                                signals.pop();
+                                expStack.push(4);
+                                b.used = true;
+                                
+                                if (!b.initialized && b.warning == 0) {
+                                    b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
+                                    b.warning = 1;
+                                }
+                                //generateAssembly(token.getLexeme(), 1);
+                                return;
+                        }
+                    }
+                }
+                throw new Exception("Váriavel  '" + token.getLexeme() + "'  não declarada!");
+                
             case 70:
                 // Faz op
                 break;
@@ -447,18 +627,22 @@ public class Semantico implements Constants
                 
                 
             case 75:
+                expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.SUM);
                 break;
             case 76:
+                expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.SUB);
                 break;
             case 77:
+                expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.MUL);
                 break;
             case 78: 
+                expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.DIV);
                 break;
@@ -491,14 +675,39 @@ public class Semantico implements Constants
                 break;
                 
             case 99:
-                //Gambiarra!
                 this.declarationAcu.type = "int";
+                
+                AssemblyStruct assembly = new AssemblyStruct("STO", "$indr");
+                assemblyText.add(assembly);
+                
+                System.out.println(isExp);
+                if (isExp) {
+                    if (!expController.get(0).isEmpty()) {
+                        int index = expController.size() - 2;
+                        isArithmetic = (String) expController.get(index).get(expController.get(index).size() - 1);
+                        expController.remove(expController.size() - 1);
+                    }
+                    
+                    AssemblyStruct assembly2 = new AssemblyStruct("LDV", (String) vectorPusher.lastElement());
+                    vectorPusher.pop();
+                    assemblyText.add(assembly2);
+                    
+                    if (!tempStack.isEmpty()) {
+                        generateAssembly((String) tempStack.lastElement(), 1);
+                        tempStack.pop();
+                    }
+                }
+                
                 break;
                 
             case 100:
+                
                 String value = returnName((int) expStack.lastElement());
                 isArithmetic = "";
-                
+                if (expController.size() == 1 ) {
+                    isExp = false;
+                }
+
                 switch (declarationAcu.type) {
                     case "int":
                         int expResult = SemanticTable.atribType(SemanticTable.INT, (int) expStack.pop());
@@ -557,24 +766,38 @@ public class Semantico implements Constants
                 break;
             
             case 101:
+                
                 for (Symbol b : symbolTable) {
                     if (b.id.equals(token.getLexeme())) {
                         b.initialized = true;
                         
                         declarationAcu = b;
                         this.vectorAcu = b.type;
-                        System.out.println(vectorAcu);
+                        
+                        actualAssembly.id = token.getLexeme();
                         return;
                     }
                 }
                 throw new Exception("Variável   '" + token.getLexeme() + "'   não declarada!");   
                 
             case 102:
-                System.out.println(this.vectorAcu);
+                isVector = true;
+                isExp = true;
                 declarationAcu.type = this.vectorAcu;
+                indexVectorReceive = "temp"+countTemp;
+                AssemblyStruct assemblySTOindex = new AssemblyStruct("STO", indexVectorReceive);
+                assemblyText.add(assemblySTOindex);
+                
+                countTemp++;
                 break;
-             
+                        
             case 110:
+                receiveSomething = true;
+                indexVectorReceive = "temp"+countTemp;
+                assemblySTOindex = new AssemblyStruct("STO", indexVectorReceive);
+                assemblyText.add(assemblySTOindex);
+                
+                countTemp++;
                 declarationAcu = symbolTable.get(symbolTable.size() - 1);
                 symbolTable.get(symbolTable.size() - 1).initialized = true;
                 break;
@@ -582,6 +805,11 @@ public class Semantico implements Constants
             case 120:
                 for (Symbol s : symbolTable) {
                     if (s.id.equals(token.getLexeme())) {
+                        AssemblyStruct assemblyPUT = new AssemblyStruct("LD", "$in_port");
+                        assemblyText.add(assemblyPUT);
+                        
+                        assemblyPUT = new AssemblyStruct("STO", s.id);
+                        assemblyText.add(assemblyPUT);
                         return;
                     }
                 }

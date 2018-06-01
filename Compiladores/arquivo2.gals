@@ -55,7 +55,7 @@ break = variable : "break"
 switch = variable : "switch"
 case = variable : "case"
 
-//aritmeticos
+//aritmeticos?
 "+"
 "-"
 "*"
@@ -188,7 +188,7 @@ l_char: {char}
 //CORPO DA FUNCAO
 <CMD_LIST> ::=  <VARIABLE_DECLARATION>#10 ";" <CMD_LIST> | #15<REPEAT_LOOP> <CMD_LIST> |  #15<IF> <CMD_LIST> | <CMD_LIST2>;
 <CMD_LIST2> ::= <DATA_ENTRY> <CMD_LIST> | return <exp> #160 ";" <CMD_LIST> |  <COMMENTS> <CMD_LIST> | <CMD_LIST3>;
-<CMD_LIST3> ::= <ID_TYPES2> <ASSIGN>";" <CMD_LIST> | variable"(" <exp11> #151")" ";" <CMD_LIST> | î;
+<CMD_LIST3> ::= <ID_TYPES2> <ASSIGN> #11";" <CMD_LIST> | variable"(" <exp11> #151")" ";" <CMD_LIST> | î;
 
 <COMMENTS> ::= comment_multi_lines | comment_line;
 //BLOCOS DE INSTRUCAO
@@ -198,7 +198,7 @@ l_char: {char}
 //DECLARACAO DE VARIAVEL
 <VARIABLE_DECLARATION> ::= <TYPE> <VAR_LIST> | <TYPE> <VAR_LIST> #110 <ASSIGN>;
 <VAR_LIST> ::= <VAR_LIST> "," <ID_TYPES> | <ID_TYPES>; //| <ASSIGN> | <VAR_LIST><ASSING>;
-<ID_TYPES> ::= variable #6 | variable #7 "[" <exp> #99 #100"]";
+<ID_TYPES> ::= variable #6 | variable #7 "[" <exp> #99 #100"]" #102;
 
 <ID_TYPES2> ::=  variable #101 | variable #101 "[" <exp> #99 #100 "]" #102;
 
@@ -236,7 +236,7 @@ l_char: {char}
 <exp7> ::= <exp7> <op_arit_baixa> <exp8> #80| <exp8>;
 <exp8> ::= <exp8> <op_arit_alta> <exp9> #81| <exp9> ;
 <exp9> ::= <op_neg> <exp10>  | <exp10>;
-<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | l_char #56| true #55 | false #55 | "(" <exp> ")" | variable #57 "(" <exp11> #151")" | variable #53 "[" <exp> #99 #100"]"; //"["<exp>"]" | 
+<exp10> ::= number_float #50| numbers #51 | binary #52| variable #53 | w #54 | l_char #56| true #55 | false #55 | "(" <exp> ")" | variable #57 "(" <exp11> #151")" | variable #60 "[" <exp> #99 #100"]"; //"["<exp>"]" | 
 <exp11> ::= <exp12> | î;
 <exp12> ::= <exp12> "," <exp13> | <exp13>;
 <exp13> ::= <LAMBDA> | <exp> #150;

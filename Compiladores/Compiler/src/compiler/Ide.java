@@ -206,13 +206,16 @@ public class Ide extends JFrame{
         codeArea.setColumns(5);
         codeArea.setRows(25);
         codeArea.setText("{\n" +
-                        "\n" +
-                        "int main ( char argc, char argv[0] ) {\n" +
-                        "\n" +
-                        "\n" +
-                        "}\n" +
-                        "\n" +
-                        "}");
+                            "\n" +
+                            "int main ( ) {\n" +
+                            "\n" +
+                            "	int b [1];\n" +
+                            "	int a;\n" +
+                            "	b[ 2 ] = 1;\n" +
+                            "\n" +
+                            "}\n" +
+                            "\n" +
+                            "}");
         
         warningCodeArea.setEditable(false);
         warningCodeArea.setLineWrap(true);
