@@ -209,9 +209,9 @@ public class Ide extends JFrame{
                             "\n" +
                             "int main ( ) {\n" +
                             "\n" +
-                            "	int b [1];\n" +
                             "	int a;\n" +
-                            "	b[ 2 ] = 1;\n" +
+                            "	int b = 2;\n" +
+                            "	int c[2];\n" +
                             "\n" +
                             "}\n" +
                             "\n" +

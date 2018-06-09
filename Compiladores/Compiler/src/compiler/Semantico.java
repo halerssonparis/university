@@ -150,6 +150,7 @@ public class Semantico implements Constants
     }
     
     public void addSymboltoList() {
+        System.out.println(actualSymbol.type + " " + actualSymbol.id);
         symbolTable.add(actualSymbol);
         flush();
     }
@@ -184,6 +185,12 @@ public class Semantico implements Constants
             }
         }
         return false;
+    }
+    
+    private void printerson() {
+        for (AssemblyStruct e : assemblyData) {
+            System.out.println("command: " + e.command + " id: " + e.id);
+        }
     }
     
     public void executeAction(int action, Token token)	throws SemanticError, Exception
@@ -245,8 +252,12 @@ public class Semantico implements Constants
                 
                 actualAssembly.id = token.getLexeme();
                 actualAssembly.command = "0";
+                assemblyData.add(actualAssembly);
+                
                 break;
+                
             case 7:
+                
                 if (verifyExistingVariable(token.getLexeme(), (int) actualScope.lastElement())) {
                     throw new Exception("Váriavel já existente!");
                 }
@@ -265,7 +276,9 @@ public class Semantico implements Constants
                 //System.out.println(token.getLexeme());
                 actualAssembly.id = token.getLexeme();
                 actualAssembly.command = "0";
+                assemblyData.add(actualAssembly);
                 isVector = true;
+                
                 
                 break;
             case 8:
@@ -278,7 +291,7 @@ public class Semantico implements Constants
             //10 - 10 se pah |  declaração de variaveis 
             case 10:
                 if (isVector) {
-                    assemblyData.add(actualAssembly);
+                    //assemblyData.add(actualAssembly);
                     
                     AssemblyStruct assembly;
                     if (receiveSomething) {
@@ -304,9 +317,10 @@ public class Semantico implements Constants
                     actualSymbol.scope = (int) actualScope.lastElement();
                     isVector = false;
                     isExp = false;
+                    
                 }
                 else {
-                    assemblyData.add(actualAssembly);
+                   // assemblyData.add(actualAssembly);
                     AssemblyStruct assembly = new AssemblyStruct("STO", actualAssembly.id);
                     assemblyText.add(assembly);
                     actualSymbol.scope = (int) actualScope.lastElement();
@@ -336,8 +350,10 @@ public class Semantico implements Constants
                     isExp = false;
                 }
                 else {
+                    //assemblyData.add(actualAssembly);
                     AssemblyStruct assembly = new AssemblyStruct("STO", actualAssembly.id);
                     assemblyText.add(assembly);
+                    //actualSymbol.scope = (int) actualScope.lastElement();
                 }
                 countTemp = 0;
             //LOOP'S 15-?
@@ -781,14 +797,18 @@ public class Semantico implements Constants
                 throw new Exception("Variável   '" + token.getLexeme() + "'   não declarada!");   
                 
             case 102:
+                
                 isVector = true;
                 isExp = true;
-                declarationAcu.type = this.vectorAcu;
+                //O ERRO TA DEPOIS DESSA LINHA
+                //declarationAcu.type = this.vectorAcu;
+                
                 indexVectorReceive = "temp"+countTemp;
                 AssemblyStruct assemblySTOindex = new AssemblyStruct("STO", indexVectorReceive);
                 assemblyText.add(assemblySTOindex);
                 
                 countTemp++;
+                
                 break;
                         
             case 110:
@@ -918,6 +938,7 @@ public class Semantico implements Constants
                         symbolWarning.add(b);
                     }
                 }
+            
                 break;
         }   
     }	
