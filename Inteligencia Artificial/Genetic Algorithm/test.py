@@ -1,4 +1,6 @@
 import numpy as np
 
-i = np.random.choice(range(20), 10, replace=False)
-print i
+t = 3
+
+for i in range(t/2, t):
+    print i
