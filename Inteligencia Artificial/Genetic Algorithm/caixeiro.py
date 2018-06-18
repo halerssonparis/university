@@ -1,6 +1,7 @@
 ## TO DO: to implement roullet,   change the bubbleSort
 
 import numpy as np
+import csv
 
 class Caixeiro:
     
@@ -12,23 +13,29 @@ class Caixeiro:
     selectedUsers = [] # this is the selected user's (by roullet)
     newPopulation = [] # this is the son's 
 
-    def __init__(self, citiesLen):
-        self.totalCities = citiesLen
-        self.cities = np.zeros([citiesLen, citiesLen])
-        self.inicializeCities(citiesLen)
+    def __init__(self):
+        self.totalCities = 20
+        self.inicializeCities()
         self.initRandomPopulation()
 
         #put the FOR here!
         self.sortData()
-        self.userSelector()
-        self.crossing()
-        self.mutation()
-        self.addNewPopulation()
+        self.printa()
+        for i in range(50):
+            self.sortData()
+            self.userSelector()
+            self.crossing()
+            self.mutation()
+            self.addNewPopulation()
+    
+        self.sortData()
 
-    def inicializeCities(self, citiesLen):
-        for i in range(citiesLen):
-            for j in range(citiesLen):
-                self.cities[i][j] = input()
+    def inicializeCities(self):
+        with open('20cities.csv') as dataset:
+            data = csv.reader(dataset, delimiter=' ')
+            for distanceTable in data:
+                self.cities.append(map(int, distanceTable))
+
 
     def addNewPopulation(self):
         count = 0
@@ -40,7 +47,7 @@ class Caixeiro:
 
     def mutation(self):
         for individual in range(len(self.newPopulation)):
-            self.newPopulation[individual][np.random.randint(low=0, high=self.totalCities, size=1)[0]] = np.random.randint(low=0, high=self.totalCities, size=1)[0]
+            self.newPopulation[individual][np.random.randint(low=0, high=self.totalCities-1, size=1)[0]] = np.random.randint(low=0, high=self.totalCities, size=1)[0]
 
 
     def crossing(self):
@@ -51,15 +58,34 @@ class Caixeiro:
             second = []
 
             for geneIndex in range(self.totalCities/2):
-                first.append(self.selectedUsers[parentsIndex][geneIndex])
-                second.append(self.selectedUsers[parentsIndex+1][geneIndex])
-            
-            for geneIndex in range(len(self.selectedUsers[parentsIndex])):
-                if ((self.selectedUsers[parentsIndex][geneIndex] not in first) and len(first) != self.totalCities):
-                    first.append(self.selectedUsers[parentsIndex][geneIndex])
-                if ((self.selectedUsers[parentsIndex+1][geneIndex] not in second) and len(second) != self.totalCities):
-                    second.append(self.selectedUsers[parentsIndex+1][geneIndex])
+                first.append(self.selectedUsers[parentsIndex][np.random.randint(low=0, high=self.totalCities-1, size=1)[0]])
+                second.append(self.selectedUsers[parentsIndex+1][np.random.randint(low=0, high=self.totalCities-1, size=1)[0]])
 
+            #print "EU SOU O FIRST {}".format(second)
+
+            for geneIndex in range(self.totalCities):
+                #print self.selectedUsers[parentsIndex][geneIndex]
+
+                if ((self.selectedUsers[parentsIndex+1][geneIndex] not in first) and len(first) != self.totalCities):
+                    first.append(self.selectedUsers[parentsIndex+1][geneIndex])
+                    if (len(first) != len(set(first))):
+                        first = list(set(first))
+
+                if ((self.selectedUsers[parentsIndex][geneIndex] not in second) and len(second) != self.totalCities):
+                    second.append(self.selectedUsers[parentsIndex][geneIndex])
+                    if (len(second) != len(set(second))):
+                        second = list(set(second))
+
+            #print "eu sou o segundo f {}".format(second)
+            '''if (len(first) != len(set(first))):
+                print "FIRST {}   {}".format(first, len(set(first)))
+
+            if (len(second) != len(set(second))):
+                print "SECOND {}     {}".format(second, len(set(second)))'''
+
+            #print first
+            #print second
+            #print
             self.newPopulation.append(first)
             self.newPopulation.append(second)
 
@@ -83,15 +109,33 @@ class Caixeiro:
         del self.redundancyPopulation[:]
    
     def initRandomPopulation(self):
-        for p in range(0, 5):
+        for p in range(0, 32):
             self.population.append(np.random.choice(range(self.totalCities), self.totalCities, replace=False))
 
     def fitness(self, way):
-        return np.sum(way)
+        #return np.sum(way)
+        i = 0
+        for city in range(1, len(way)):
+            i = i + self.cities[way[city-1]][way[city]]
+        return i    
+    
+    def bestRoute(self):
+        route = 9999999
+        w = []
+        for way in self.population:
+            if (self.fitness(way) < route):
+                route = self.fitness(way)
+                w = way
+
+        print "\n{}   :   {}".format(w, route) 
 
     def printa(self):
         #print self.cities
-        print self.population
+        for s in self.population:
+            print "{}   :  {}".format(s, self.fitness(s))
+            
+        print
+        #self.bestRoute()
         #print self.newPopulation        
         #print self.selectedUsers
         #print self.fitness([1,2,5,2,5])
@@ -102,9 +146,7 @@ class Caixeiro:
 
 
 
-print "Numero de cidades: "
-lCities = input()
-problem = Caixeiro(lCities)
+problem = Caixeiro()
 
 #problem.initRandomPopulation()
 problem.printa()
