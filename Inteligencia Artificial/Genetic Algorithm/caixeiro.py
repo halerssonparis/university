@@ -4,6 +4,7 @@ import csv
 
 class Caixeiro:
     
+    choices = [16,32,100,500,1000,5000,10000]
     lenPopulation = 0
     fileCities = ""
     
@@ -22,9 +23,10 @@ class Caixeiro:
         self.totalCities = fileC
         self.inicializeCities()
         self.initRandomPopulation()
+        self.sortData()
         self.printa("| Rota sem aplicacao do Algoritimo ")
     
-        print "\n[-] Aplicando Algoritimo Genetico...    OBS: Os resultados serao exibidos da menor rota para a maior rota."
+        print "\n[-] Aplicando Algoritimo Genetico...        OBS: Os resultados serao exibidos da menor rota para a maior rota."
 
         for i in range(generation):
             self.sortData()
@@ -43,7 +45,12 @@ class Caixeiro:
 
 
     def initVariables(self, lenP, fileC):
-        self.lenPopulation = lenP
+        if (lenP in self.choices):
+            self.lenPopulation = lenP
+        else:
+            print "Tamanho da Populacao nao permitido!"
+            exit()
+    
         if (fileC == 20):
             self.fileCities = "20cities.txt"
         elif (fileC == 30):
@@ -124,6 +131,7 @@ class Caixeiro:
 
 
     def bestRoute(self, msg):
+        #gamb
         route = 9999999
         w = []
         for way in self.population:
@@ -144,15 +152,18 @@ class Caixeiro:
 
 
 #pop = 32 16 100 500 1000 5000 10000
-print "[*] Escolha uma populacao:\n-16\n-32\n-100\n-500\n-1000\n-5000\n-10000\nDigiteExemplo: 32\n"
+print
+print "###### ALGORITIMO GENETICO PARA SOLUCAO DO PROBLEMA DO CAIXEIRO VIAJANTE ######"
+print "--- Se o seu computador for fraco (hardware), escolha valores baixos, pois o programa vai mostrar todas as rotas.\n"
+print "[*] Escolha uma populacao:\n-16\n-32\n-100\n-500\n-1000\n-5000\n-10000\nDigiteExemplo: 500\n"
 resultPopulation = input()
 print
 
-print "[*] Digite a quantidade de geracoes: \nDigiteExemplo: 52"
+print "[*] Digite a quantidade de geracoes: \nDigiteExemplo: 50"
 resultG = input()
 print
 
-print "[*]Escolha a quantidade de cidades:\n-20\n-30\n-40\nDigiteExemplo: 30\n"
+print "[*]Escolha a quantidade de cidades:\n-20\n-30\n-40\nDigiteExemplo: 20\n"
 resultC = input()
 
 problem = Caixeiro(resultPopulation, resultG, resultC)

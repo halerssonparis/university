@@ -2,3 +2,5 @@ Trabalho de Halersson Paris Goes.
 
 Através do Terminal, execute o comando "python caixeiro.py"
 A instruções seguintes serão exibidas durante a execução do programa.
+
+obs: não usar o "python3" pois a sintaxe do "print" muda.
