@@ -1,6 +1,7 @@
 Trabalho de Halersson Paris Goes.
 
+-Deverá estar instalado o python na versão 2.7 
+obs: não usar o "python3" pois a sintaxe do "print" muda.
+
 Através do Terminal, execute o comando "python caixeiro.py"
 A instruções seguintes serão exibidas durante a execução do programa.
-
-obs: não usar o "python3" pois a sintaxe do "print" muda.

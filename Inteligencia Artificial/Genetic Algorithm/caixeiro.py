@@ -139,7 +139,7 @@ class Caixeiro:
                 route = self.fitness(way)
                 w = way
 
-        print "Melhor Rota {} : {}   :   {}".format(msg, w, route) 
+        print "Melhor Rota {} : {}   :  Valor da Rota: {}".format(msg, w, route) 
         print
 
     def printa(self, msg):
@@ -151,20 +151,20 @@ class Caixeiro:
 
 
 
-#pop = 32 16 100 500 1000 5000 10000
 print
-print "###### ALGORITIMO GENETICO PARA SOLUCAO DO PROBLEMA DO CAIXEIRO VIAJANTE ######"
-print "--- Se o seu computador for fraco (hardware), escolha valores baixos, pois o programa vai mostrar todas as rotas.\n"
+print "###### ALGORITIMO GENETICO PARA O PROBLEMA DO CAIXEIRO VIAJANTE ######"
+print "--- Se o seu computador for fraco (hardware), escolha valores baixos, pois o programa vai mostrar todas as populacoes.\n"
+
 print "[*] Escolha uma populacao:\n-16\n-32\n-100\n-500\n-1000\n-5000\n-10000\nDigiteExemplo: 500\n"
-resultPopulation = input()
+resultPopulation = input(">")
 print
 
 print "[*] Digite a quantidade de geracoes: \nDigiteExemplo: 50"
-resultG = input()
+resultG = input(">")
 print
 
 print "[*]Escolha a quantidade de cidades:\n-20\n-30\n-40\nDigiteExemplo: 20\n"
-resultC = input()
+resultC = input(">")
 
 problem = Caixeiro(resultPopulation, resultG, resultC)
 problem.printa("| Rota apos a aplicacao do Algoritimo")
