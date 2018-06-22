@@ -39,6 +39,8 @@ public class Semantico implements Constants
     String funcP = "";
     String vectorAcu = "";
     
+    private int controlExp1000 = 1000;
+    private boolean expVecotr = false;
     String isArithmetic;
     boolean isVector = false;
     boolean receiveSomething = false;
@@ -46,6 +48,7 @@ public class Semantico implements Constants
     private boolean isExp = false;
     
     private String indexVectorReceive = "";
+    private boolean sideLeft = true;
     
     public void clearTable() {
         this.symbolTable = new ArrayList<>();
@@ -77,6 +80,9 @@ public class Semantico implements Constants
         countTemp = 0;
         isExp = false;
         tempStack = new Stack();
+        sideLeft = true;
+        expVecotr = false;
+        controlExp1000 = 1000;
         
         indexVectorReceive = "";
         /*for (Symbol s : symbolTable) {
@@ -155,6 +161,18 @@ public class Semantico implements Constants
         flush();
     }
     
+    private void addAssemblyExpression() {
+        
+        if ((this.sideLeft || isArithmetic.equals("+")) && isExp) {
+            AssemblyStruct assemblySTO1000 = new AssemblyStruct("STO", "1000");
+            assemblyText.add(assemblySTO1000);
+        }else if (!this.sideLeft && isExp) {
+            AssemblyStruct assemblySTO1001 = new AssemblyStruct("STO", "1001");
+            assemblyText.add(assemblySTO1001);
+        }
+        
+    }
+    
     private void generateAssembly(String lexeme, int code) {
         String instruction = code == 0 ? "LDI" : "LD";
         String instructionSUB = code == 0 ? "SUBI" : "SUB";
@@ -169,7 +187,7 @@ public class Semantico implements Constants
                 AssemblyStruct newAssembly = new AssemblyStruct(instructionADD, lexeme);
                 assemblyText.add(newAssembly);   
             } else if (isArithmetic.equals("-")) {    
-                AssemblyStruct newAssembly = new AssemblyStruct(instructionSUB, lexeme);
+                AssemblyStruct newAssembly = new AssemblyStruct(instruction, lexeme);
                 assemblyText.add(newAssembly);   
             }
         }
@@ -295,17 +313,17 @@ public class Semantico implements Constants
                     
                     AssemblyStruct assembly;
                     if (receiveSomething) {
-                        assembly = new AssemblyStruct("STO", "temp"+countTemp);
-                        assemblyText.add(assembly);
+                        //assembly = new AssemblyStruct("STO", "1000");
+                        //assemblyText.add(assembly);
                     }
-                    assembly = new AssemblyStruct("LD", indexVectorReceive);
+                    assembly = new AssemblyStruct("LD", "1002");
                     assemblyText.add(assembly);
 
                     assembly = new AssemblyStruct("STO", "$indr");
                     assemblyText.add(assembly);
                     
                     if (receiveSomething) {
-                        assembly = new AssemblyStruct("LD", "temp"+countTemp);
+                        assembly = new AssemblyStruct("LD", "1000");
                         assemblyText.add(assembly);
                     }
                     
@@ -330,16 +348,16 @@ public class Semantico implements Constants
                 
             case 11:
                 if (isVector) {
-                    AssemblyStruct assembly = new AssemblyStruct("STO", "temp"+countTemp);
-                    assemblyText.add(assembly);
+                    //AssemblyStruct assembly = new AssemblyStruct("STO", "1000");
+                    //assemblyText.add(assembly);
                     
-                    assembly = new AssemblyStruct("LD", indexVectorReceive);
+                    AssemblyStruct assembly = new AssemblyStruct("LD", "1002");
                     assemblyText.add(assembly);
                     
                     assembly = new AssemblyStruct("STO", "$indr");
                     assemblyText.add(assembly);
                     
-                    assembly = new AssemblyStruct("LD", "temp"+countTemp);
+                    assembly = new AssemblyStruct("LD", "1000");
                     assemblyText.add(assembly);
                     
                     assembly = new AssemblyStruct("STOV", actualAssembly.id);
@@ -379,13 +397,24 @@ public class Semantico implements Constants
             // exp 50 - ?
             case 50:
                 expStack.push(SemanticTable.FLO);
+                
                 generateAssembly(token.getLexeme(), 0);
-
+                if (expController.size() > 1) {
+                    AssemblyStruct assembly = new AssemblyStruct("STO", "1001");
+                    assemblyText.add(assembly);
+                }else {
+                    addAssemblyExpression();
+                }
                 break;
             case 51:
                 expStack.push(SemanticTable.INT);
                 generateAssembly(token.getLexeme(), 0);
-                
+                if (expController.size() > 1) {
+                    AssemblyStruct assembly = new AssemblyStruct("STO", "1001");
+                    assemblyText.add(assembly);
+                }else {
+                    addAssemblyExpression();
+                }
                 break;
             case 52: 
                 // binario
@@ -408,6 +437,7 @@ public class Semantico implements Constants
                                     b.warning = 1;
                                 }
                                 generateAssembly(token.getLexeme(), 1);
+                                addAssemblyExpression();
                                 return;
                             case "float":
                                 if (!signals.isEmpty()) {
@@ -421,6 +451,7 @@ public class Semantico implements Constants
                                     b.warning = 1;
                                 }
                                 generateAssembly(token.getLexeme(), 1);
+                                addAssemblyExpression();
                                 return;
                             case "char":
                                 if (!signals.isEmpty()) {
@@ -539,12 +570,13 @@ public class Semantico implements Constants
                  for (Symbol b : symbolTable) {
                     if (b.id.equals(token.getLexeme()) && b.scope <= (int) actualScope.lastElement() && b.funcP.equals(this.funcP)) {
                         
-                        if (isArithmetic.equals("+") || isArithmetic.equals("-")) {
+                        /*if (isArithmetic.equals("+") || isArithmetic.equals("-")) {
                             AssemblyStruct assembly = new AssemblyStruct("STO", "temp"+countTemp);
                             tempStack.push("temp"+countTemp);
                             assemblyText.add(assembly);
                             countTemp++;
-                        }
+                        }*/
+                        //addAssemblyExpression();
                         List newList = new ArrayList<>();
                         expController.add(newList);
                         
@@ -565,7 +597,8 @@ public class Semantico implements Constants
                                     b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
                                     b.warning = 1;
                                 }
-                               //generateAssembly(token.getLexeme(), 1);
+                                this.vectorAcu = token.getLexeme();
+                                //addAssemblyExpression();
                                 return;
                             case "float":
                                 if (!signals.isEmpty()) {
@@ -578,7 +611,8 @@ public class Semantico implements Constants
                                     b.message = b.message + " | Váriavel sendo usada sem ser inicializada! ";
                                     b.warning = 1;
                                 }
-                                //generateAssembly(token.getLexeme(), 1);
+                                //addAssemblyExpression();
+                                this.vectorAcu = token.getLexeme();
                                 return;
                             case "char":
                                 if (!signals.isEmpty()) {
@@ -646,11 +680,13 @@ public class Semantico implements Constants
                 expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.SUM);
+                this.sideLeft = false;
                 break;
             case 76:
                 expController.get(expController.size() -1 ).add(token.getLexeme());
                 isArithmetic = token.getLexeme();
                 expStack.push(SemanticTable.SUB);
+                this.sideLeft = false;
                 break;
             case 77:
                 expController.get(expController.size() -1 ).add(token.getLexeme());
@@ -667,6 +703,22 @@ public class Semantico implements Constants
             case 80:
                 if (!executeExp()) {
                     throw new Exception("Expressão mal formulada");
+                }
+                
+                if (isArithmetic.equals("-")) {
+                    this.vectorAcu = "";
+                    AssemblyStruct assemblySTO1000 = new AssemblyStruct("LD", "1000");
+                    assemblyText.add(assemblySTO1000);
+
+                    assemblySTO1000 = new AssemblyStruct("SUB", "1001");
+                    assemblyText.add(assemblySTO1000);
+
+                    assemblySTO1000 = new AssemblyStruct("STO", "1000");
+                    assemblyText.add(assemblySTO1000);
+                }
+                System.out.println(expController.size());
+                if (expController.size() == 2 && !this.sideLeft) {
+                    this.sideLeft = true;
                 }
                 break;
                 
@@ -693,10 +745,10 @@ public class Semantico implements Constants
             case 99:
                 this.declarationAcu.type = "int";
                 
-                AssemblyStruct assembly = new AssemblyStruct("STO", "$indr");
-                assemblyText.add(assembly);
+                //AssemblyStruct assembly = new AssemblyStruct("STO", "$indr");
+                //assemblyText.add(assembly);
                 
-                System.out.println(isExp);
+                //System.out.println(isExp);
                 if (isExp) {
                     if (!expController.get(0).isEmpty()) {
                         int index = expController.size() - 2;
@@ -704,9 +756,18 @@ public class Semantico implements Constants
                         expController.remove(expController.size() - 1);
                     }
                     
+                    AssemblyStruct assemblySTOINDVR = new AssemblyStruct("STO", "$indr");
+                    assemblyText.add(assemblySTOINDVR);
                     AssemblyStruct assembly2 = new AssemblyStruct("LDV", (String) vectorPusher.lastElement());
                     vectorPusher.pop();
                     assemblyText.add(assembly2);
+                    if (this.isArithmetic.equals("+") && !sideLeft) {
+                        assembly2 = new AssemblyStruct("ADD", "1000");
+                        assemblyText.add(assembly2);
+                    }
+                    addAssemblyExpression();
+                    /*AssemblyStruct assemblySTOTEMP = new AssemblyStruct("STO", "temp"+countTemp);
+                    assemblyText.add(assemblySTOTEMP);*/
                     
                     if (!tempStack.isEmpty()) {
                         generateAssembly((String) tempStack.lastElement(), 1);
@@ -719,7 +780,7 @@ public class Semantico implements Constants
             case 100:
                 
                 String value = returnName((int) expStack.lastElement());
-                isArithmetic = "";
+                //isArithmetic = "";
                 if (expController.size() == 1 ) {
                     isExp = false;
                 }
@@ -788,7 +849,7 @@ public class Semantico implements Constants
                         b.initialized = true;
                         
                         declarationAcu = b;
-                        this.vectorAcu = b.type;
+                        //this.vectorAcu = b.type;
                         
                         actualAssembly.id = token.getLexeme();
                         return;
@@ -804,7 +865,7 @@ public class Semantico implements Constants
                 //declarationAcu.type = this.vectorAcu;
                 
                 indexVectorReceive = "temp"+countTemp;
-                AssemblyStruct assemblySTOindex = new AssemblyStruct("STO", indexVectorReceive);
+                AssemblyStruct assemblySTOindex = new AssemblyStruct("STO", "1002");
                 assemblyText.add(assemblySTOindex);
                 
                 countTemp++;
@@ -813,11 +874,12 @@ public class Semantico implements Constants
                         
             case 110:
                 receiveSomething = true;
-                indexVectorReceive = "temp"+countTemp;
+                isArithmetic = "";
+                /*indexVectorReceive = "temp"+countTemp;
                 assemblySTOindex = new AssemblyStruct("STO", indexVectorReceive);
                 assemblyText.add(assemblySTOindex);
                 
-                countTemp++;
+                countTemp++;*/
                 declarationAcu = symbolTable.get(symbolTable.size() - 1);
                 symbolTable.get(symbolTable.size() - 1).initialized = true;
                 break;
@@ -835,6 +897,21 @@ public class Semantico implements Constants
                 }
                 throw new Exception("Variável  '" + token.getLexeme() + "'   não foi declarada!");
             
+            case 121:
+                for (Symbol s : symbolTable) {
+                    if (s.id.equals(token.getLexeme())) {
+                        
+                        AssemblyStruct assemblyECHO = new AssemblyStruct("LD", s.id);
+                        assemblyText.add(assemblyECHO);
+                        
+                        AssemblyStruct assemblyPUT = new AssemblyStruct("STO", "$out_port");
+                        assemblyText.add(assemblyPUT);
+                        
+                        return;
+                    }
+                }
+                throw new Exception("Variável  '" + token.getLexeme() + "'   não foi declarada!");
+                
             case 150:
                 paramsExp.push((int) expStack.pop());
                 break;
