@@ -27,6 +27,7 @@ class BagProblem:
     weights = []
     values = []
     soluctions = Soluctions()
+    newSoluction = []
 
     def __init__(self):
         print "[*] - Welcome!"
@@ -37,8 +38,8 @@ class BagProblem:
 
             for index, item in enumerate(data):
                 if (index == 0):
-                    self.inputsLength = item[0]
-                    self.maxCapacity = item[1]
+                    self.inputsLength = int(item[0])
+                    self.maxCapacity = int(item[1])
                 elif (index == 1):
                     self.weights = item
                 elif (index == 2):
@@ -48,40 +49,51 @@ class BagProblem:
 
     def searchSoluctions(self):
         #[0] weigth  |  [1] value
-        newSoluction.append([0, 0])           
         newWeigth = 0
 
-        for (i = 0; i < self.inputsLength; i++):
-            del newSoluction[:]
+        for i in range(self.inputsLength):
+            del self.newSoluction[:]
             
-            if (values[i] < self.maxCapacity):      
+            if (self.values[i] < self.maxCapacity):      
 
-                newSoluction.append([weights[i], values[i])         
-                newWeigth = values[i]
+                self.newSoluction.append([self.weights[i], self.values[i]])         
+                newWeigth = self.values[i]
 
-                for (j = i+1; j < self.inputsLength; j++):
-                    if (newWeigth + values[j] < self.maxCapacity):
-                        for (k = j; k < self.inputsLength; k++):
-                            
-                            
+                for j in range(i+1, self.inputsLength):
+                    if (newWeigth + self.values[j] < self.maxCapacity):
+                        self.newSoluction.append([self.weights[j], self.values[j]])
+                        newWeigth = newWeigth + self.values[i]
 
-                    elif (newWeigth + values[j] == self.maxCapacity):
-                        newSoluction.append([weights[j], values[i])
-                        newWeigth = newWeigth + values[i]
-                        self.soluctions.add(newSoluction, newWeigth)
-                        newSoluction.pop()
+                        for k in range(j + 1, inputsLength):
+                            if (newWeigth + self.values[k] < self.maxCapacity):
+                                self.newSoluction.append([self.weights[j], self.values[j]])
+                                newWeigth = newWeigth + self.values[j]
+
+                            elif (newWeigth + self.values[k] == self.maxCapacity):
+                                self.newSoluction.append([self.weights[k], self.values[k]])
+                                self.soluctions.add(self.newSoluction, newWeigth + self.values[k])
+                                self.newSoluction.pop()
+
+                    elif (newWeigth + self.values[j] == self.maxCapacity):
+                        self.newSoluction.append([self.weights[j], self.values[i]])
+                        self.soluctions.add(self.newSoluction, newWeigth + self.values[i])
+                        self.newSoluction.pop()
                     
-            elif (values[i] == maxCapacity):
-                self.soluctions.add(weights[i], values[i])
+            elif (self.values[i] == self.maxCapacity):
+                self.soluctions.add(self.weights[i], self.values[i])
 
     def printValues(self):
         print "[-] - Items:"
-        print self.inputsLength
+        print self.soluctions.inputsSoluctions
+        '''print self.inputsLength
         print self.maxCapacity
         print self.weights
-        print self.values
+        print self.values'''
 
 BagzaoBrabo = BagProblem()
 BagzaoBrabo.loadData("instancias2/a100.lia")
+BagzaoBrabo.searchSoluctions()
 BagzaoBrabo.printValues()
+
+
 
