@@ -1,4 +1,3 @@
-## TO DO: to implement roullet,   change the bubbleSort
 import numpy as np
 import csv
 
@@ -101,12 +100,38 @@ class Caixeiro:
             self.newPopulation.append(second)
 
     def userSelector(self):
-        #to implement roullet
-        for lucky in range(len(self.population)/2):
-            self.selectedUsers.append(self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]])
+        for index in range(len(self.population)/2):
+            parent1 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent2 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent3 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent4 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent5 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent6 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+
+            f1, f2, f3, f4, f5, f6 = self.fitness(parent1), self.fitness(parent2), self.fitness(parent3), self.fitness(parent4), self.fitness(parent5), self.fitness(parent6)
+    
+            p1, p2, p3, p4, p5, p6 = f1, f1 + f2, f1 + f2 + f3, f1 + f2 + f3 + f4, f1 + f2 + f3 + f4 + f5, f1 + f2 + f3 + f4 + f5 + f6
+
+            totalFitness = f1 + f2 + f3 + f4 + f5 + f6
+            result = np.random.randint(low=0, high=totalFitness, size=1)[0]
+            
+            if (result <= p1):
+                self.selectedUsers.append(parent1)
+            elif (result > p1 and result <= p2):
+                self.selectedUsers.append(parent2)
+            elif (result > p2 and result <= p3):
+                self.selectedUsers.append(parent3)
+            elif (result > p3 and result <= p4):
+                self.selectedUsers.append(parent4)
+            elif (result > p4 and result <= p5):
+                self.selectedUsers.append(parent4)
+            elif (result > p5 and result <= p6):
+                self.selectedUsers.append(parent4)
 
 
     def sortData(self):
+        del self.redundancyPopulation[:]
+
         for way in self.population:
             self.redundancyPopulation.append(self.fitness(way))
 
@@ -117,7 +142,7 @@ class Caixeiro:
                     self.redundancyPopulation[i], self.redundancyPopulation[j] = self.redundancyPopulation[j], self.redundancyPopulation[i]
                     self.population[i], self.population[j] = self.population[j], self.population[i]
         
-        del self.redundancyPopulation[:]
+        
    
     def initRandomPopulation(self):
         for p in range(0, self.lenPopulation):
