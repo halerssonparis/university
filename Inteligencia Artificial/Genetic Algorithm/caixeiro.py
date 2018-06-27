@@ -101,12 +101,12 @@ class Caixeiro:
 
     def userSelector(self):
         for index in range(len(self.population)/2):
-            parent1 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
-            parent2 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
-            parent3 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
-            parent4 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
-            parent5 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
-            parent6 = self.population[np.random.randint(low=0, high=len(self.population)/2, size=1)[0]]
+            parent1 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
+            parent2 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
+            parent3 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
+            parent4 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
+            parent5 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
+            parent6 = self.population[np.random.randint(low=0, high=len(self.population)-1, size=1)[0]]
 
             f1, f2, f3, f4, f5, f6 = self.fitness(parent1), self.fitness(parent2), self.fitness(parent3), self.fitness(parent4), self.fitness(parent5), self.fitness(parent6)
     
