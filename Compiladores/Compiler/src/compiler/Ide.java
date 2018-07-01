@@ -219,8 +219,14 @@ public class Ide extends JFrame{
 "\n" +
 "int main ( ) {\n" +
 "\n" +
-"	int b[2] = 1+ b[2];\n" +
+"	int a = 1 + 2;\n" +
 "\n" +
+"	while ( 1 == 1) { \n" +
+"	}\n" +
+"\n" +
+"	if ( 1== 1 ) {\n" +
+"	}else {\n" +
+"	}\n" +
 "}\n" +
 "\n" +
 "}");   
