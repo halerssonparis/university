@@ -205,7 +205,7 @@ l_char: {char}
 
 //LACOS DE REPETICOES
 <REPEAT_LOOP> ::= <DO_LOOP> | <FOR_LOOP> | <WHILE_LOOP>;
-<DO_LOOP> ::= do #27 "{" <CMD_LIST> "}" while "("<exp>")" #28;
+<DO_LOOP> ::= do #27 "{" <CMD_LIST> "}" while #29 "("<exp>")" #28;
 <FOR_LOOP> ::= for "(" <LOOP_DEC_LIST> ")" "{" <CMD_LIST> "}";
 <WHILE_LOOP> ::= while #25"(" <exp> ")" "{" <CMD_LIST> "}" #26;
 
@@ -215,9 +215,9 @@ l_char: {char}
 <LOOP_ATRIB_TYPE> ::= <ASSIGN> | "++" | "--";
 
 //IF
-<IF> ::= if  "(" <exp> ")" #20 "{" <CMD_LIST> "}"#16 <ELSE_IF> <ELSE> #21;
+<IF> ::= if #20 "(" <exp> ")" "{" <CMD_LIST> "}"#16 <ELSE_IF> <ELSE> #21;
 <ELSE_IF> ::= #17 else_if  "(" <exp> ")" "{" <CMD_LIST> "}"#16 <ELSE_IF> | î;
-<ELSE> ::= #18 else  "{" <CMD_LIST> "}"#16 | î;
+<ELSE> ::= #18 else  "{" <CMD_LIST> "}"#19 | î;
 
 //LEITURA E ESCRITA
 

@@ -54,14 +54,20 @@ public class Semantico implements Constants
     
     private String indexVectorReceive = "";
     private boolean sideLeft = true;
-    int count = 1;
+    int count = 0;
+    Stack RelController = new Stack();
+    
     
     String doWhileAcu = "";
     boolean isDoWhile = false;
+    boolean isWhile = false;
+    
     public void clearTable() {
+        RelController = new Stack();
+        isWhile = false;
         isDoWhile = false;
         doWhileAcu = "";
-        count = 1;
+        count = 0;
         expRelational = "";
         this.symbolTable = new ArrayList<>();
         this.actualSymbol = new Symbol();
@@ -356,46 +362,68 @@ public class Semantico implements Constants
                 this.scope++;
                 this.actualScope.push(this.scope);
                 break;
+                
             case 18:
-                count++;
-                AssemblyStruct assembly = new AssemblyStruct("JMP", "R"+(count));
+                int acu = (int) RelController.pop();
+                RelController.push(count);
+                
+                System.out.println(RelController.size());
+                AssemblyStruct assembly = new AssemblyStruct("JMP", "R"+((int) RelController.pop()));
                 assemblyText.add(assembly);
                 
                 
-                assembly = new AssemblyStruct("R"+(count - 1)+":", "");
+                RelController.push(count);
+                RelController.push(acu);
+                
+                assembly = new AssemblyStruct("R"+((int) RelController.pop())+":", "");
                 assemblyText.add(assembly);
+                
                 
                 flush();
                 this.scope++;
                 this.actualScope.push(this.scope);
                 break;
                 
+            case 19:
+               
+                break;
+                
+            case 20:
+                RelController.push(count);
+                break;
+                
             case 21:
-                AssemblyStruct newAssembly = new AssemblyStruct("R"+count+":", "");
+                AssemblyStruct newAssembly = new AssemblyStruct("R"+((int) RelController.pop())+":", "");
                 assemblyText.add(newAssembly);
                 count++;
                 break;
                 
             case 25:
+                isWhile = true;
+                RelController.push(count + 1);
+                RelController.push(count);
                 newAssembly = new AssemblyStruct("R"+count+":", "");
                 assemblyText.add(newAssembly); 
                 count++;
                 break;
                 
             case 26:
-                newAssembly = new AssemblyStruct("JMP", "R"+(--count));
+                newAssembly = new AssemblyStruct("JMP", "R"+((int) RelController.pop()));
                 assemblyText.add(newAssembly); 
                 
-                count++;
-                newAssembly = new AssemblyStruct("R"+count+":", "");
+             
+                newAssembly = new AssemblyStruct("R"+((int) RelController.pop()) +":", "");
                 assemblyText.add(newAssembly); 
-                count++;
+         
                 break;
                 
             case 27:
-                isDoWhile = true;
+               
+                RelController.push(count);
                 newAssembly = new AssemblyStruct("R"+count+":", "");
                 assemblyText.add(newAssembly);
+                
+                count++;
                 break;
                 
             case 28: 
@@ -403,6 +431,9 @@ public class Semantico implements Constants
                 //assemblyText.add(newAssembly); 
                 count++;
                 break;
+               
+            case 29:
+                isDoWhile = true;
                 
             // exp 50 - ?
             case 50:
@@ -733,11 +764,19 @@ public class Semantico implements Constants
                 assemblyText.add(assembly);
                 
                 if (isDoWhile) {
-                    assembly = new AssemblyStruct(doWhileAcu, "R"+count+":");
+                    count++;
+                    assembly = new AssemblyStruct(doWhileAcu, "R"+((int) RelController.pop())+":");
                     assemblyText.add(assembly);
                     isDoWhile = false;
                 }else {
-                    assembly = new AssemblyStruct(expRelational, "R"+count+":");
+                    count++;
+                    if (isWhile) {
+                        assembly = new AssemblyStruct(expRelational, "R"+((int) RelController.lastElement() + 1));
+                        isWhile = false;
+                    }
+                    else {
+                        assembly = new AssemblyStruct(expRelational, "R"+((int) RelController.lastElement()));
+                    }
                     assemblyText.add(assembly);
                 }
                 break;
