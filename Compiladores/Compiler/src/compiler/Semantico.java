@@ -299,9 +299,10 @@ public class Semantico implements Constants
                 actualSymbol.funcP = this.funcP;
                 addSymboltoList();
                 
+                AssemblyStruct assemb1 = new AssemblyStruct("0", token.getLexeme());
                 actualAssembly.id = token.getLexeme();
                 actualAssembly.command = "0";
-                assemblyData.add(actualAssembly);
+                assemblyData.add(assemb1);
                 
                 break;
                 
@@ -325,7 +326,8 @@ public class Semantico implements Constants
                 //System.out.println(token.getLexeme());
                 actualAssembly.id = token.getLexeme();
                 actualAssembly.command = "0";
-                assemblyData.add(actualAssembly);
+                AssemblyStruct assemb2 = new AssemblyStruct("0", token.getLexeme());
+                assemblyData.add(assemb2);
                 isVector = true;
                 
                 
@@ -339,12 +341,12 @@ public class Semantico implements Constants
               
             //10 - 10 se pah |  declaração de variaveis 
             case 10:
-                
+                printerson();
                 actualSymbol.scope = (int) actualScope.lastElement();
                 break; 
                 
             case 11:
-                
+                printerson();
                 actualSymbol.scope = (int) actualScope.lastElement();
                 break;
                 
@@ -1082,7 +1084,7 @@ public class Semantico implements Constants
                         symbolWarning.add(b);
                     }
                 }
-            
+                
                 break;
         }   
     }	
