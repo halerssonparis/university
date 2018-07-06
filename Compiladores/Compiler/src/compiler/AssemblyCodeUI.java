@@ -51,7 +51,11 @@ public class AssemblyCodeUI extends JFrame{
             data = data + "    " + e.id+":"+e.command+"\n";
         }
         for (AssemblyStruct e : t) {
-            text = text + "    "+ e.command+" "+e.id+"\n";
+            if (e.id.equals("LocalR") || e.command.equals("_main:")) {
+                text = text + "    "+ e.command+"\n";
+            }else {
+                text = text + "        "+ e.command+" "+e.id+"\n";
+            }
         }
         codeArea.setText(data + text);
         

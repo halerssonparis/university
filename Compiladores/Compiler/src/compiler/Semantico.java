@@ -124,7 +124,7 @@ public class Semantico implements Constants
     
     private void assemblyGeneretor(AssemblyStruct n2, String op, AssemblyStruct n1) {
         String command1 = "int".equals(n1.type) ? "LDI" : "LD";
-        String command2 = "int".equals(n2.type) ? op.equals("+") ? "ADDI" : "SUBI" : op.equals("-") ? "SUBI" : "SUB";
+        String command2 = "int".equals(n2.type) ? op.equals("+") ? "ADDI" : "SUBI" : op.equals("-") ? "SUB" : "ADD";
         
         AssemblyStruct assembly = new AssemblyStruct(command1, n1.id);
         assemblyText.add(assembly);
@@ -733,6 +733,7 @@ public class Semantico implements Constants
                 }
                
                 assemblyGeneretor((AssemblyStruct) LeftAndRigthExpression.pop(), (String) LeftAndRigthExpression.pop(), (AssemblyStruct) LeftAndRigthExpression.pop());
+               
                 break;
                 
             case 81:
@@ -750,7 +751,9 @@ public class Semantico implements Constants
                     String command = c.type == "int" ? "LDI" : "LD";
                     assembly = new AssemblyStruct(command, c.id);
                     assemblyText.add(assembly);
-                }else {
+                    System.out.println("entreiaqui");
+                }else if (LeftAndRigthExpression.size() != 0) {
+                    System.out.println("entrei aquidesu");
                     assemblyGeneretor((AssemblyStruct) LeftAndRigthExpression.pop(), (String) LeftAndRigthExpression.pop(), (AssemblyStruct) LeftAndRigthExpression.pop());
                 }
                 
@@ -819,7 +822,7 @@ public class Semantico implements Constants
                     String command = c.type == "int" ? "LDI" : "LD";
                     AssemblyStruct assembly32 = new AssemblyStruct(command, c.id);
                     assemblyText.add(assembly32);
-                }else {
+                }else if (LeftAndRigthExpression.size() != 0 ){
                     assemblyGeneretor((AssemblyStruct) LeftAndRigthExpression.pop(), (String) LeftAndRigthExpression.pop(), (AssemblyStruct) LeftAndRigthExpression.pop());
                 }
                  
