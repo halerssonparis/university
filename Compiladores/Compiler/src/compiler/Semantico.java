@@ -541,7 +541,17 @@ public class Semantico implements Constants
                 if (!signals.isEmpty()) {
                     throw new Exception("Não pode negar umas boolean");
                 }
-                
+                System.out.println(token.getLexeme());
+                if ( "true".equals(token.getLexeme())) {
+                    ass1 = new AssemblyStruct("", "1");
+                    ass1.type = "int";
+                    LeftAndRigthExpression.push(ass1);
+                }
+                else if ( "false".equals(token.getLexeme()) ) {
+                    ass1 = new AssemblyStruct("", "0");
+                    ass1.type = "int";
+                    LeftAndRigthExpression.push(ass1);
+                } 
                 expStack.push(SemanticTable.BOO);
                 break;
             case 56:
