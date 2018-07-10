@@ -1,24 +1,33 @@
 import csv
 import collections
+import copy
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Soluctions:
     
     inputsSoluctions = []
     
-    compare = lambda list1, list2: collenctions.Counter(list1) == collenctions.Counter(list2)    
+    compare = lambda list1, list2: collections.Counter(list1) == collections.Counter(list2)    
 
     #def __init__(self):
 
     def add(self, inputs, totalValue):
-        if (verifySoluctions(inputs)):
-            inputsSoluctions.append([inputs, totalValue])
+        if (self.verifySoluctions(inputs)):
+            self.inputsSoluctions.append([inputs, totalValue])
 
     def verifySoluctions(self, newSoluction):
         for soluction in self.inputsSoluctions:
-            if (compare(soluction[0], newSoluction)):
+            #Coloquei soluction[0], pq na posicao [1] esta a soma total dos pesos da solucao
+            if (self.compare(soluction[0], newSoluction)):
                 return False
                  
         return True
+
+    #def compare(self, list1, list2):
+        #for index, item in enumerate(list1):
+            
+    
 
 class BagProblem:
     
@@ -28,6 +37,7 @@ class BagProblem:
     values = []
     soluctions = Soluctions()
     newSoluction = []
+
 
     def __init__(self):
         print "[*] - Welcome!"
@@ -41,46 +51,57 @@ class BagProblem:
                     self.inputsLength = int(item[0])
                     self.maxCapacity = int(item[1])
                 elif (index == 1):
-                    self.weights = item
+                    for i in item:
+                        self.weights.append(int(i))
                 elif (index == 2):
-                    self.values = item                    
+                    for i in item:
+                        self.values.append(int(i))    
 
     
 
     def searchSoluctions(self):
+
+        plt.axis([0, 10000, 0, 100])
+        
+
         #[0] weigth  |  [1] value
+        soluctions_t = []
+        trys = []
         newWeigth = 0
+        scheduler = 0
+        counter = 0        
 
         for i in range(self.inputsLength):
-            del self.newSoluction[:]
+            if (self.weights[i] < self.maxCapacity):
+                newWeigth = self.weights[i]
+                trys.append(i)
+
+                while trys:
+                    counter = counter + 1
+                    #se a somas dos pesos nao passarem e nao tiver aquele item na soolucao, ele adiciona.
+                    if (newWeigth + self.weights[scheduler] < self.maxCapacity and (scheduler not in trys)):
+                        newWeigth = newWeigth + self.weights[scheduler]
+                        trys.append(scheduler)
+                        scheduler = 0
+
+                    elif (scheduler == (self.inputsLength - 1)):
+                        soluctions_t.append([copy.deepcopy(trys), newWeigth])
+                        plt.scatter(counter, len(trys))
+                        plt.pause(0.05)
+
+                        print "New S: {}".format(trys)
+
+                        while (scheduler == (self.inputsLength - 1) and trys):
+                            scheduler = trys[-1]
+                            newWeigth = newWeigth - self.weights[scheduler]
+                            trys.pop()
+
+                        if (scheduler + 1 <= (self.inputsLength - 1) and trys):
+                            scheduler = scheduler + 1
+                    else:
+                        scheduler = scheduler + 1
             
-            if (self.values[i] < self.maxCapacity):      
-
-                self.newSoluction.append([self.weights[i], self.values[i]])         
-                newWeigth = self.values[i]
-
-                for j in range(i+1, self.inputsLength):
-                    if (newWeigth + self.values[j] < self.maxCapacity):
-                        self.newSoluction.append([self.weights[j], self.values[j]])
-                        newWeigth = newWeigth + self.values[i]
-
-                        for k in range(j + 1, inputsLength):
-                            if (newWeigth + self.values[k] < self.maxCapacity):
-                                self.newSoluction.append([self.weights[j], self.values[j]])
-                                newWeigth = newWeigth + self.values[j]
-
-                            elif (newWeigth + self.values[k] == self.maxCapacity):
-                                self.newSoluction.append([self.weights[k], self.values[k]])
-                                self.soluctions.add(self.newSoluction, newWeigth + self.values[k])
-                                self.newSoluction.pop()
-
-                    elif (newWeigth + self.values[j] == self.maxCapacity):
-                        self.newSoluction.append([self.weights[j], self.values[i]])
-                        self.soluctions.add(self.newSoluction, newWeigth + self.values[i])
-                        self.newSoluction.pop()
-                    
-            elif (self.values[i] == self.maxCapacity):
-                self.soluctions.add(self.weights[i], self.values[i])
+        plt.show()
 
     def printValues(self):
         print "[-] - Items:"
@@ -93,7 +114,6 @@ class BagProblem:
 BagzaoBrabo = BagProblem()
 BagzaoBrabo.loadData("instancias2/a100.lia")
 BagzaoBrabo.searchSoluctions()
-BagzaoBrabo.printValues()
 
 
 
