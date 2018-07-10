@@ -61,8 +61,9 @@ class BagProblem:
 
     def searchSoluctions(self):
 
-        plt.axis([0, 10000, 0, 100])
-        
+        #plt.axis([0, 10000, 0, 100])
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
 
         #[0] weigth  |  [1] value
         soluctions_t = []
@@ -70,6 +71,8 @@ class BagProblem:
         newWeigth = 0
         scheduler = 0
         counter = 0        
+        maxLocal = [0, []]
+        t = 0
 
         for i in range(self.inputsLength):
             if (self.weights[i] < self.maxCapacity):
@@ -86,10 +89,21 @@ class BagProblem:
 
                     elif (scheduler == (self.inputsLength - 1)):
                         soluctions_t.append([copy.deepcopy(trys), newWeigth])
-                        plt.scatter(counter, len(trys))
-                        plt.pause(0.05)
+                        if (t == 0):
+                            maxLocal[0] = newWeigth
+                            maxLocal[1] = trys
+                            print maxLocal
+                            t = 1
 
-                        print "New S: {}".format(trys)
+                        if (newWeigth < maxLocal[0] and len(trys) > len(maxLocal[1])):
+                            maxLocal[0] = newWeigth
+                            maxLocal[1] = trys
+                            print maxLocal
+
+                        plt.scatter(counter, len(trys))                 
+                        plt.pause(0.001)
+
+                        #print "New S: {}".format(trys)
 
                         while (scheduler == (self.inputsLength - 1) and trys):
                             scheduler = trys[-1]

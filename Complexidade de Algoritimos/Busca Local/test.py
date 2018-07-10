@@ -1,25 +1,14 @@
-import matplotlib.pyplot as plt
-import time
 import numpy as np
+import matplotlib.pyplot as plt
 
-plt.axis([0, 100, -10, 10])
-plt.ion()
-plt.show()
-ydata = [0]
-line, = plt.plot(ydata)
 
-ts_start = time.time()
-
-## perpetual loop code
-for i in range(1000):
-    p_x = int(int(time.time())-int(ts_start))
-    p_y = 100 # keeps getting generated in the loop code
-    ydata.append(p_y)
-    line.set_xdata(np.arange(len(ydata)))
-    line.set_ydata(ydata)
-    plt.draw()
-    time.sleep(0.05)
-
+for i in range(50000000):
+    d = np.random.randint(low=0, high=20, size=1)[0]
+    x = np.arange(0, d, 0.1);
+    y = np.sin(x)
+    plt.plot(x, y)
+    plt.show()
+    plt.pause(0.001)
 '''if (self.weights[i] < self.maxCapacity):      
 
                 self.newSoluction.append([self.weights[i], self.values[i]])         
