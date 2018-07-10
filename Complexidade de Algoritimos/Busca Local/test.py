@@ -1,14 +1,15 @@
-import numpy as np
-import matplotlib.pyplot as plt
+import collections
+
+a = [1, 3, 5, 6, 2]
+
+b = [1,3,5,6,0]
+
+result =  all(elem in a  for elem in b)
 
 
-for i in range(50000000):
-    d = np.random.randint(low=0, high=20, size=1)[0]
-    x = np.arange(0, d, 0.1);
-    y = np.sin(x)
-    plt.plot(x, y)
-    plt.show()
-    plt.pause(0.001)
+if (result):
+    print "sambou!"
+
 '''if (self.weights[i] < self.maxCapacity):      
 
                 self.newSoluction.append([self.weights[i], self.values[i]])         

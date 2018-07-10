@@ -74,6 +74,13 @@ class BagProblem:
         maxLocal = [0, []]
         t = 0
 
+        def verify():
+            for ways in soluctions_t:                        
+                result = all(elem in ways[0]  for elem in trys)
+                if (result):
+                    return False
+            return True
+
         for i in range(self.inputsLength):
             if (self.weights[i] < self.maxCapacity):
                 newWeigth = self.weights[i]
@@ -88,7 +95,12 @@ class BagProblem:
                         scheduler = 0
 
                     elif (scheduler == (self.inputsLength - 1)):
-                        soluctions_t.append([copy.deepcopy(trys), newWeigth])
+                        if (verify()):
+                            soluctions_t.append([copy.deepcopy(trys), newWeigth])
+                            plt.scatter(counter, len(trys))                 
+                            plt.pause(0.001)                            
+                            print trys
+
                         if (t == 0):
                             maxLocal[0] = newWeigth
                             maxLocal[1] = trys
@@ -99,9 +111,6 @@ class BagProblem:
                             maxLocal[0] = newWeigth
                             maxLocal[1] = trys
                             print maxLocal
-
-                        plt.scatter(counter, len(trys))                 
-                        plt.pause(0.001)
 
                         #print "New S: {}".format(trys)
 
