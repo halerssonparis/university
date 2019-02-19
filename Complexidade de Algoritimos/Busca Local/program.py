@@ -3,6 +3,10 @@ import collections
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+import datetime
+
+
 
 class Soluctions:
     
@@ -81,14 +85,16 @@ class BagProblem:
                     return False
             return True
 
-        for i in range(self.inputsLength):
+        for i in range(self.inputsLength):  
+
             if (self.weights[i] < self.maxCapacity):
                 newWeigth = self.weights[i]
                 trys.append(i)
 
                 while trys:
+                    initialTime = datetime.datetime.now()
                     counter = counter + 1
-                    #se a somas dos pesos nao passarem e nao tiver aquele item na soolucao, ele adiciona.
+                    #se a som    as dos pesos nao passarem e nao tiver aquele item na soolucao, ele adiciona.
                     if (newWeigth + self.weights[scheduler] < self.maxCapacity and (scheduler not in trys)):
                         newWeigth = newWeigth + self.weights[scheduler]
                         trys.append(scheduler)
@@ -97,22 +103,21 @@ class BagProblem:
                     elif (scheduler == (self.inputsLength - 1)):
                         if (verify()):
                             soluctions_t.append([copy.deepcopy(trys), newWeigth])
+                            
+                            if (len(trys) > len(maxLocal[1])):
+                                maxLocal[0] = newWeigth
+                                maxLocal[1] = trys
+                                print maxLocal
+
                             plt.scatter(counter, len(trys))                 
                             plt.pause(0.001)                            
-                            print trys
+                            #print trys
 
                         if (t == 0):
                             maxLocal[0] = newWeigth
                             maxLocal[1] = trys
-                            print maxLocal
+                            #print maxLocal
                             t = 1
-
-                        if (newWeigth < maxLocal[0] and len(trys) > len(maxLocal[1])):
-                            maxLocal[0] = newWeigth
-                            maxLocal[1] = trys
-                            print maxLocal
-
-                        #print "New S: {}".format(trys)
 
                         while (scheduler == (self.inputsLength - 1) and trys):
                             scheduler = trys[-1]
@@ -123,7 +128,15 @@ class BagProblem:
                             scheduler = scheduler + 1
                     else:
                         scheduler = scheduler + 1
-            
+
+                    
+                    endTime = datetime.datetime.now() - initialTime
+                    res = str(endTime)
+                    
+                    print res[9:]
+                    #plt.scatter(counter, endTime)                 
+                    #plt.pause(0.001)          
+
         plt.show()
 
     def printValues(self):
@@ -134,8 +147,10 @@ class BagProblem:
         print self.weights
         print self.values'''
 
+
+
 BagzaoBrabo = BagProblem()
-BagzaoBrabo.loadData("instancias2/a100.lia")
+BagzaoBrabo.loadData("instancias2/"+str(sys.argv[1]))
 BagzaoBrabo.searchSoluctions()
 
 

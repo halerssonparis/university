@@ -1,14 +1,15 @@
-import collections
+import numpy as np
+import matplotlib.pyplot as plt
 
-a = [1, 3, 5, 6, 2]
+ax = plt.subplot(111)
 
-b = [1,3,5,6,0]
+t = np.arange(0.0, 5.0, 0.01)
+s = np.cos(2*np.pi*t)
+line, = plt.plot(t, s, lw=1)
 
-result =  all(elem in a  for elem in b)
+plt.ylim(-2,2)
+plt.show()
 
-
-if (result):
-    print "sambou!"
 
 '''if (self.weights[i] < self.maxCapacity):      
 

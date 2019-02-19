@@ -1,0 +1,32 @@
+# bibliotecas -> GPU
+cuBLAS
+cuPARSE
+
+search the hardware zion phi
+### openACC ### -> junção de vários metodos para GPU
+
+use \#pragmas and change to "acc";
+
+and to use pragma target
+example:
+//#pragma omp target teams distribute parallel for redutction (+:pi)
+
+
+
+
+diference between openMP and openACC
+-> openMP = treat more than one architeture -> just parallel if the processor understand the code.
+-> openACC = more function implemented, but is more easy to do the compiler undertand.
+
+directives goes to resolve the low level programming: example ( openCL )
+
+in S.O search "ghost zone", and "computer architecture"
+Search this: use memoria contiguas para arrays multidimencionais 
+
+PGI -> Compiler free good pckt (do not suporte openMP target):
+Cray -> friendly more than others compiler (is not free)
+GCC + openACC -> free too and default
+
+spack = install full package to compile llvm (correctly)
+
+ 

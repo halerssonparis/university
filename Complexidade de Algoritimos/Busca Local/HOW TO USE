@@ -1,0 +1,13 @@
+Deverá estar instalado o python 2.7 ( OBS: Não o 3.x pois o "Print" Muda")
+
+O Programa Abre um PLOT de todas as soluções, sendo assim encontrando todas as posivel soluções (viaveis em tempo de execução).
+utilizar o "PIP install para as dependencias do programa"
+- csv
+- collections
+- copy
+- numpy as np
+- matplotlib.pyplot
+- sys
+- datetime
+
+
