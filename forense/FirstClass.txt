@@ -1,0 +1,34 @@
+### SO's ###
+Caine 
+Tail
+
+
+
+Open the OS on virtual box. 
+
+create a folder out the virtual box
+
+Link the folder on virtualBox setup : ex:> Shared Folders = "click on folder plus" > set your windows folder; 
+
+Let's to the > Storage > "click on disk" and select the OS Caine (OS to do forensic)
+
+Go to the > System and order the boot order to optic disk; 
+
+Boot the system!!!
+-------------------------------------------
+
+commands:
+
+fdisk -l  > to get the path of OS (suspect windows)
+
+mkdir someFolderOnLinux
+
+mount -t vboxsf <folder name (windows)> ./SomeFolderOnLinux       ex:  mount -t vboxsf extern_hd_folder ./SomeFolderOnLinux.
+
+dd if=/dev/sda status=progress | tee img-hdzao-brabo-memo.dd | sha256sum | tee hash-hdzao-brabo-memo.txt 
+## this command copy the full disk to the folder and get the hash of full system. #### 
+
+dd = copy 
+tee -> input entry | output  -> study more this kkk
+
+
