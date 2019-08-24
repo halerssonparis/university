@@ -1,4 +1,4 @@
-Server to detect P2P networks. -> Child Rescue Coalition
+wewewServer to detect P2P networks. -> Child Rescue Coalition
 
 ## RipReg something, I don't remind ##
 
@@ -23,3 +23,12 @@ samparse_tln.pl
 winscp_sessions.pl
 winvnc.pl
 yahoo_cu.pl
+
+
+
+
+##### FTK IMAGE ##### Imager-lite
+-> ;-; 
+
+### Iped ###
+-> iped -d /path/to/image -p /path/to/folder
