@@ -1,1 +1,25 @@
 Server to detect P2P networks. -> Child Rescue Coalition
+
+## RipReg something, I don't remind ##
+
+-> rip -r <file> -p <plugin>
+
+#Files#
+DEFAULT  SAM  SECURITY  SOFTWARE  SYSTEM  NTUSER.DAT = /media/sda1/Windows/System32
+
+# cool plugins #
+recentdocs.pl
+userassist.pl
+
+# CONTAIN PASSWORD ON PAYLAOD # 
+command:  for i in $(ls); do cat $i | grep password > /dev/null; if (("$?" == "0")); then echo "$i"; fi ; done     
+author: me :D
+
+aim.pl
+haven_and_hearth.pl
+lsa_packages.pl
+samparse.pl
+samparse_tln.pl
+winscp_sessions.pl
+winvnc.pl
+yahoo_cu.pl
